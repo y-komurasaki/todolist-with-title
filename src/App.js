@@ -1,21 +1,51 @@
 import './App.css';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { addTask } from './features/Tasks';
+import { useState } from 'react';
+import { v4 as uuidv4 } from "uuid";
 
 
 function App() {
-  const  {id, title, content}  = useSelector((state) =>state.tasks);
+  //useSelectorでstoreの状態にアクセス
+  //const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const taskList = useSelector((state) => state.tasks);
+  console.log(taskList)
+
+  const dispatch = useDispatch();
+
+  const handleClick = () => {
+    dispatch(addTask(
+      {
+        id: uuidv4(),
+        content: content,
+      }
+    ));
+  };
+
   return (
     <div className="App">
-      <>
-        <div className="displayTask">
-          <h1>{title}</h1>
-          <h2>{content}</h2>
+       <div className="addTodo">
+          <input type="text" placeholder='Todoを入力'onChange={(e) => setContent(e.target.value)}/>
+          <button onClick={() => handleClick()}>追加</button>
+          <hr/>
         </div>
-        <div className="addTodo">
-          <input type="text" placeholder='Todoを入力'/>
-          <button>追加</button>
+         
+         {taskList.map((title) => (
+          <div key={title.id} className="title">
+              <h1 className="title">{title.title}</h1>
+          </div>
+          ))}
+
+        <div className='displayTask'>
+          {taskList.map((task) => (
+            <div key={task.id} className="task">
+              <h1 className="taskContent">{task.content}</h1>
+              <button>削除</button>
+            </div>
+            
+          ))}
         </div>
-      </>
     </div>
   );
 }
