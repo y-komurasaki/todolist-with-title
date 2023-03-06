@@ -3,8 +3,6 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = 
 
 [
-  {title: 'Todo一覧',//初期状態
-  id: 0,},
   {content:'test',
   id: 1,}
 ]

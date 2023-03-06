@@ -10,7 +10,8 @@ function App() {
   //const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const taskList = useSelector((state) => state.tasks);
-  console.log(taskList)
+  const taskTitle = useSelector((state) => state.title);
+
 
   const dispatch = useDispatch();
 
@@ -30,12 +31,14 @@ function App() {
           <button onClick={() => handleClick()}>追加</button>
           <hr/>
         </div>
-         
-         {taskList.map((title) => (
-          <div key={title.id} className="title">
-              <h1 className="title">{title.title}</h1>
-          </div>
-          ))}
+
+        <div className='displayTitle'>
+          {taskTitle.map((title) => (
+           <div key={title.id} className="title">
+               <h1 className="title">{title.title}</h1>             
+           </div>
+           ))}
+        </div>
 
         <div className='displayTask'>
           {taskList.map((task) => (
@@ -43,7 +46,6 @@ function App() {
               <h1 className="taskContent">{task.content}</h1>
               <button>削除</button>
             </div>
-            
           ))}
         </div>
     </div>
