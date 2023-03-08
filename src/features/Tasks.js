@@ -1,17 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = 
-
-[
-  {content:'test',
-  id: 1,}
-]
+  { 
+    title: 'Todo一覧',
+    contents: [""],
+  }
 const tasksSlice = createSlice({
   name: "tasks", //Slice自体の名前
   initialState, //初期状態
   reducers: { //アクション
     addTask: (state, action) => { 
-      state.push(action.payload);
+      state.contents.push(action.payload);
     },
   }, 
 });
