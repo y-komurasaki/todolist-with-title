@@ -7,43 +7,45 @@ import { v4 as uuidv4 } from "uuid";
 
 function App() {
   //useSelectorでstoreの状態にアクセス
-  //const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+
+  const [contents, setContents] = useState("");
   const taskList = useSelector((state) => state.tasks);
-  const taskTitle = useSelector((state) => state.title);
+  console.log(taskList.contents)
+
 
 
   const dispatch = useDispatch();
 
   const handleClick = () => {
-    dispatch(addTask(
-      {
-        id: uuidv4(),
-        content: content,
-      }
-    ));
+    if (contents === "")
+    return
+
+    dispatch(
+      addTask(     
+       [...contents]
+        )
+      );
+      
+    setContents("");
   };
+
 
   return (
     <div className="App">
        <div className="addTodo">
-          <input type="text" placeholder='Todoを入力'onChange={(e) => setContent(e.target.value)}/>
+          <input type="text"
+            placeholder='Todoを入力'
+            onChange={(e) => setContents(e.target.value)}
+            value={contents}/>
           <button onClick={() => handleClick()}>追加</button>
           <hr/>
         </div>
 
-        <div className='displayTitle'>
-          {taskTitle.map((title) => (
-           <div key={title.id} className="title">
-               <h1 className="title">{title.title}</h1>             
-           </div>
-           ))}
-        </div>
-
+        <h1>{taskList.title}</h1>
         <div className='displayTask'>
-          {taskList.map((task) => (
-            <div key={task.id} className="task">
-              <h1 className="taskContent">{task.content}</h1>
+          {taskList.contents.map((task) => (
+            <div key={uuidv4} className="task">
+              <h1 className="taskContents">{task}</h1>
               <button>削除</button>
             </div>
           ))}
