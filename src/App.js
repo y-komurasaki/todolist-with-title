@@ -43,8 +43,8 @@ function App() {
 
         <h1>{taskList.title}</h1>
         <div className='displayTask'>
-          {taskList.contents.map((task) => (
-            <div key={uuidv4} className="task">
+          {taskList.contents.map((task,index) => (
+            <div key={index} className="task">
               <h1 className="taskContents">{task}</h1>
               <button>削除</button>
             </div>
