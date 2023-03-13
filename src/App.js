@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from "uuid";
 function App() {
   //useSelectorでstoreの状態にアクセス
   const [task, setTask] = useState("");
-  const [editInputTask, setEditInputTask] = useState("");
+  const [editInputTask, setEditInputTask] = useState();
   const [taskIndex, setTaskIndex] = useState(null)
   const taskList = useSelector((state) => state.tasks);
 
@@ -82,7 +82,7 @@ function App() {
                     <input 
                       type='text' 
                       onChange={handleChange} 
-                      placeholder={task}
+                      defaultValue={task}
                     />
                   </form>
                     ) : (
