@@ -11,11 +11,12 @@ const tasksSlice = createSlice({
   reducers: { //アクション
     addTask: (state, action) => { 
       state.contents.push(action.payload);
+
     },
     editTask: (state, action) => { 
-      state.contents[0] = action.payload
-      //何番目 = インプットコンテント;
-    }, 
+      const {index, text } = action.payload
+     state.contents[index] = text;
+    },    
   }, 
 });
 

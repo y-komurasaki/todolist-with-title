@@ -7,95 +7,87 @@ import { v4 as uuidv4 } from "uuid";
 
 function App() {
   //useSelectorでstoreの状態にアクセス
-
-  const [contents, setContents] = useState("");
-  const [isClick, setIsClick] = useState(false);
-  const [inputContent, setInputContent] = useState("");
-  const [selectedIndex, setSelectedIndex] = useState(null)
+  const [task, setTask] = useState("");
+  const [editInputTask, setEditInputTask] = useState("");
+  const [taskIndex, setTaskIndex] = useState(null)
   const taskList = useSelector((state) => state.tasks);
 
 
 
 
   const dispatch = useDispatch();
-
-  const handleClick = () => {
-    if (contents === "")
+  const addTaskClick = () => {
+ 
+    if (task === "")
     return
-
     dispatch(
-      addTask(     
-       [...contents,selectedIndex]
+      addTask(  
+        
+        task,
         )
-      );
-    setContents("");
-    setSelectedIndex(null);
-    
-    
-
+        );
+        setTask("");
   };
 
-  const editClick = () => {
-
-    setIsClick(true);
-    
-    console.log(isClick);
+  const editTaskClick = (index) => {
+    setTaskIndex(index)
     console.log(taskList.contents);
   }
   
   const handleChange = (e) => {
-    setInputContent(e.target.value);
+    setEditInputTask(e.target.value);
   }
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setIsClick(false);
     dispatch(
       editTask(   
-
-        [inputContent]
+        {
+          index: taskIndex,
+          text: editInputTask
+         }
         )
         );
-        
-        setInputContent("");
+        setEditInputTask("");
+        setTaskIndex(null);
 
     //ディスパッチしてエディットタスクに　配列番号とインプットコンテントを渡す
     //stateの初期化
   };
-
 
   return (
     <div className="App">
        <div className="addTodo">
           <input type="text"
             placeholder='Todoを入力'
-            onChange={(e) => setContents(e.target.value)}
-            value={contents}/>
-          <button onClick={() => handleClick()}>追加</button>
+            onChange={(e) => setTask(e.target.value)}
+            value={task}/>
+          <button onClick={() => addTaskClick()}>追加</button>
           <hr/>
         </div>
 
         <h1>{taskList.title}</h1>
         <div className='displayTask'>
-          {taskList.contents.map((task,index) => (
+          {taskList.contents.map((task,index) => (           
             <div 
             key={index} 
             className="task"     
             >
               <div className="taskContents"
-               onClick= {editClick}>
-
+                onClick= {() => editTaskClick(index)}>
                 { 
-                 (isClick === true ) && selectedIndex === isClick ? (
-                  //編集したいインデックスとマップのインデックスが一致してるか
-                
+                  (taskIndex === index) ? (
+                  //編集したいインデックスとマップのインデックスが一致してるか      
                   <form onSubmit={handleSubmit}>
-                    <input type='text' onChange={handleChange} />
+                    <input 
+                      type='text' 
+                      onChange={handleChange} 
+                      placeholder={task}
+                    />
                   </form>
                     ) : (
                       <h3 > {task}</h3>
-                    ) }
-
+                    )}
               </div>
               <button>削除</button>
             </div>
@@ -107,3 +99,4 @@ function App() {
 }
 
 export default App;
+
