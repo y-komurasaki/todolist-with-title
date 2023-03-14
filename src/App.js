@@ -1,6 +1,6 @@
 import './App.css';
 import { useSelector, useDispatch } from 'react-redux';
-import { addTask,editTask } from './features/Tasks';
+import { addTask,editTask,deleteTask } from './features/Tasks';
 import { useState } from 'react';
 import { v4 as uuidv4 } from "uuid";
 
@@ -39,6 +39,7 @@ function App() {
   }
 
   const handleSubmit = (e) => {
+   
     e.preventDefault();
     dispatch(
       editTask(   
@@ -54,6 +55,15 @@ function App() {
     //ディスパッチしてエディットタスクに　配列番号とインプットコンテントを渡す
     //stateの初期化
   };
+
+  const deleteTaskClick = (index) => {
+   
+    dispatch(
+      deleteTask( 
+         index
+        )
+    )
+  }
 
   return (
     <div className="App">
@@ -89,7 +99,7 @@ function App() {
                       <h3 > {task}</h3>
                     )}
               </div>
-              <button>削除</button>
+              <button onClick= {() => deleteTaskClick(task,index)}>削除</button>
             </div>
           ))}
         </div>

@@ -17,9 +17,12 @@ const tasksSlice = createSlice({
       const {index, text } = action.payload
      state.contents[index] = text;
     },    
+    deleteTask: (state, action) => { 
+      const {index} = action.payload
+      state.contents.splice( index, 1 );
+    },    
   }, 
 });
 
-export const {addTask} = tasksSlice.actions;
-export const {editTask} = tasksSlice.actions;
+export const {addTask,editTask,deleteTask} = tasksSlice.actions;
 export default tasksSlice.reducer; //reducerをstore.jsに渡す
