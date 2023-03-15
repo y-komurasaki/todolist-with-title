@@ -10,16 +10,19 @@ const tasksSlice = createSlice({
   initialState, //初期状態
   reducers: { //アクション
     addTask: (state, action) => { 
-      state.contents.push(action.payload);
+      const {text, id } = action.payload
+      state.contents.push({text, id});
 
     },
     editTask: (state, action) => { 
-      const {index, text } = action.payload
-     state.contents[index] = text;
+      const {text ,id } = action.payload;
+      console.log(text,id)
+     state.contents[id].text = text;
+     
     },    
     deleteTask: (state, action) => { 
-      const {index} = action.payload
-      state.contents.splice( index, 1 );
+      const {id} = action.payload
+      state.contents.splice( id, 1 );
     },    
   }, 
 });
