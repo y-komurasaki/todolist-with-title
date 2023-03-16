@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 
 function App() {
   //useSelectorでstoreの状態にアクセス
-  const [addInputTask, setAddInputTask] = useState("");
+  const [newTaskText, setNewTaskText] = useState("");
   const [taskId, setTaskId] = useState(uuidv4())
   const [editInputTask, setEditInputTask] = useState();
   const taskList = useSelector((state) => state.tasks);
@@ -14,19 +14,19 @@ function App() {
   const dispatch = useDispatch();
   const addTaskClick = () => {
  
-    if (addInputTask === "")
+    if (newTaskText === "")
     return
     setTaskId(uuidv4())
     dispatch(
       
       addTask(   
         {
-          text: addInputTask,
-          id: taskId
+          id:taskId,
+          text:newTaskText,
         }
         )
         );
-        setAddInputTask("");
+        setNewTaskText("");
   };
 
   const editTaskClick = (id) => {
@@ -42,7 +42,7 @@ function App() {
    
     e.preventDefault();
     dispatch(
-      editTask(   
+      editTask(  
          {
           text: editInputTask,
           id: taskId
@@ -50,17 +50,18 @@ function App() {
         )
         );
         setEditInputTask("");
-        //setTaskId(taskId)
-
+        setTaskId(uuidv4())
     //ディスパッチしてエディットタスクに配列番号とインプットコンテントを渡す
     //stateの初期化
   };
 
-  const deleteTaskClick = (id) => {
+  const deleteTaskClick = () => {
    
     dispatch(
-      deleteTask( 
-         id
+      deleteTask(
+        {
+          id:taskId
+        } 
         )
     )
   }
@@ -71,8 +72,8 @@ function App() {
        >
           <input type="text"
             placeholder='Todoを入力'
-            onChange={(e) => setAddInputTask(e.target.value)}
-            value={addInputTask}/>
+            onChange={(e) => setNewTaskText(e.target.value)}
+            value={newTaskText}/>
           <button onClick={() => addTaskClick()}>追加</button>
           <hr/>
         </div>
@@ -100,7 +101,7 @@ function App() {
                       <h3 > {task.text}</h3>
                     )}
               </div>
-              <button onClick= {() => deleteTaskClick(task,task.id)}>削除</button>
+              <button onClick= {() => deleteTaskClick(task.id)}>削除</button>
             </div>
           ))}
         </div>

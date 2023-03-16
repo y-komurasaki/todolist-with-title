@@ -9,21 +9,24 @@ const tasksSlice = createSlice({
   name: "tasks", //Slice自体の名前
   initialState, //初期状態
   reducers: { //アクション
-    addTask: (state, action) => { 
-      const {text, id } = action.payload
-      state.contents.push({text, id});
 
+    addTask: (state, action) => {     
+      state.contents.push(action.payload);
     },
-    editTask: (state, action) => { 
-      const {text ,id } = action.payload;
-      console.log(text,id)
-     state.contents[id].text = text;
-     
-    },    
+
+    editTask: (state, action) => {
+      const { id, text } = action.payload;
+      state.contents = state.contents.map((task) => (
+        (task.id === id) ? 
+        {...task, text}
+        : task
+      ));
+    },
+
     deleteTask: (state, action) => { 
       const {id} = action.payload
-      state.contents.splice( id, 1 );
-    },    
+      state.contents = state.contents.filter((task) => task.id !== id);
+},  
   }, 
 });
 
