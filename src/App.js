@@ -55,12 +55,12 @@ function App() {
     //stateの初期化
   };
 
-  const deleteTaskClick = () => {
+  const deleteTaskClick = (id) => {
    
     dispatch(
       deleteTask(
         {
-          id:taskId
+          id
         } 
         )
     )
