@@ -39,6 +39,7 @@ function App() {
   }
 
   const handleSubmit = (e) => {
+
    
     e.preventDefault();
     dispatch(
@@ -49,8 +50,13 @@ function App() {
          }
         )
         );
+
+      if (editInputTask === "")
+      return
+      
         setEditInputTask("");
         setTaskId(uuidv4())
+
     //ディスパッチしてエディットタスクに配列番号とインプットコンテントを渡す
     //stateの初期化
   };
@@ -68,17 +74,18 @@ function App() {
 
   return (
     <div className="App">
-       <div className="addTodo"
+
+
+        <h1>{taskList.title}</h1>
+        <hr/>
+        <div className="addTodo"
        >
           <input type="text"
             placeholder='Todoを入力'
             onChange={(e) => setNewTaskText(e.target.value)}
             value={newTaskText}/>
           <button onClick={() => addTaskClick()}>追加</button>
-          <hr/>
         </div>
-
-        <h1>{taskList.title}</h1>
         <div className='displayTask'>
           {taskList.contents.map((task) => (           
             <div 
