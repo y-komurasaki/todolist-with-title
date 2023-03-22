@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 
 function App() {
   //useSelectorでstoreの状態にアクセス
-  const [taskListTitle, setTaskListTitle] = useState("");
+  const [newListTitleText, setNewListTitleText] = useState("");
   const [listId, setListId] = useState(uuidv4())
   const [newTaskText, setNewTaskText] = useState("");
   const [taskId, setTaskId] = useState(uuidv4())
@@ -15,7 +15,7 @@ function App() {
 
   const dispatch = useDispatch();
   const addTaskListClick = () => {
-    if (taskListTitle === "")
+    if (newListTitleText === "")
     return
     setListId(uuidv4())
     dispatch(
@@ -23,14 +23,15 @@ function App() {
       addTaskList(   
         {
           listId:listId,
-          title:taskListTitle,
+          newTitleText:newListTitleText,
         }
-        )
-        );
-        setTaskListTitle("");
+      )
+    );
+    setNewListTitleText("");
+    console.log(listId)
   }
 
-  const addTaskClick = () => {
+  const addTaskClick = (listId) => {
  
     if (newTaskText === "")
     return
@@ -40,19 +41,23 @@ function App() {
       addTask(   
         {
           listId:listId,
-          id:taskId,
-          text:newTaskText,
+          taskId:taskId,
+          newText:newTaskText,
         }
         )
         );
-        setNewTaskText("");
+        setNewTaskText("");  
+        console.log(listId)
+        console.log(taskId)   
   };
 
 
-  const editTaskClick = (id) => {
-    setTaskId(id)
-    console.log(tasks.taskLists);
+  const editTaskClick = (listId,taskId) => {
+    setListId(listId)
+    setTaskId(taskId)
   }
+  console.log(listId)
+  console.log(taskId)
   
   const handleChange = (e) => {
     setEditInputTask(e.target.value);
@@ -60,16 +65,18 @@ function App() {
 
   const handleSubmit = (e) => {
 
-   
+
     e.preventDefault();
     dispatch(
       editTask(  
          {
+          listId:listId,
+          taskId:taskId,
           text: editInputTask,
-          id: taskId
          }
         )
         );
+
 
       if (editInputTask === "")
       return
@@ -97,7 +104,7 @@ function App() {
           <input 
             type="text"
             placeholder='タイトルを入力'
-            onChange={(e) => setTaskListTitle(e.target.value)}
+            onChange={(e) => setNewListTitleText(e.target.value)}
           />
           <button onClick={() => addTaskListClick()}>追加</button>
       <div className="taskLists">
@@ -114,7 +121,7 @@ function App() {
               onChange={(e) => setNewTaskText(e.target.value)}
               value={newTaskText}
             />
-           <button onClick={() => addTaskClick()}>追加</button>
+           <button onClick={() => addTaskClick(list.listId)}>追加</button>
           </div>
             <div className='displayTask'>
               {list.contents.map((task) => (           
@@ -123,7 +130,7 @@ function App() {
                 className="task"     
                 >
                   <div className="taskContents"
-                    onClick= {() => editTaskClick(task.id)}>
+                    onClick= {() => editTaskClick(list.listId,task.id)}>
                     { 
                       (taskId === task.id) ? (
                       //編集したいインデックスとマップのインデックスが一致してるか      
