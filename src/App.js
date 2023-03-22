@@ -10,7 +10,7 @@ function App() {
   const [listId, setListId] = useState(uuidv4())
   const [newTaskText, setNewTaskText] = useState("");
   const [taskId, setTaskId] = useState(uuidv4())
-  const [editInputTask, setEditInputTask] = useState();
+  const [editInputTaskText, setEditInputTaskText] = useState();
   const tasks = useSelector((state) => state.tasks);
 
   const dispatch = useDispatch();
@@ -20,7 +20,7 @@ function App() {
     setListId(uuidv4())
     dispatch(
       
-      addTaskList(   
+    addTaskList(   
         {
           listId:listId,
           newTitleText:newListTitleText,
@@ -60,7 +60,7 @@ function App() {
   console.log(taskId)
   
   const handleChange = (e) => {
-    setEditInputTask(e.target.value);
+    setEditInputTaskText(e.target.value);
   }
 
   const handleSubmit = (e) => {
@@ -72,24 +72,22 @@ function App() {
          {
           listId:listId,
           taskId:taskId,
-          text: editInputTask,
+          editText: editInputTaskText,
          }
         )
         );
 
 
-      if (editInputTask === "")
+      if (editInputTaskText === "")
       return
       
-        setEditInputTask("");
+        setEditInputTaskText("");
         setTaskId(uuidv4())
-
-    //ディスパッチしてエディットタスクに配列番号とインプットコンテントを渡す
-    //stateの初期化
+        console.log(taskId)
   };
 
   const deleteTaskClick = (id) => {
-   
+    console.log(taskId)
     dispatch(
       deleteTask(
         {
@@ -110,9 +108,8 @@ function App() {
       <div className="taskLists">
       {tasks.taskLists.map((list) => (
         <div key={list.id} className="taskList">
-
-          <h1>{list.title}</h1>
-          
+          <hr/>
+            <h1>{list.title}</h1>
           <hr/>
           <div className="addTodo" >
             <input

@@ -36,18 +36,24 @@ const tasksSlice = createSlice({
 
 
     editTask: (state, action) => {
-      const { id, text } = action.payload;
-      state.taskLists.contents = state.taskLists.contents.map((task) => (
-        (task.id === id) ? 
-        {...task, text}
-        : task
-        
-      ));
+      const { taskId, editText, listId } = action.payload;
+    
+      state.taskLists = state.taskLists.map((taskList) => {
+        if (taskList.listId === listId) {
+          const editContents = taskList.contents.map((task) => (
+            task.id === taskId ? 
+            { ...task, text: editText } 
+            : task
+          ));
+          return { ...taskList, contents: editContents };
+        }
+        return taskList;
+      });
     },
 
     deleteTask: (state, action) => { 
       const { id } = action.payload
-      state.taskLists[0].contents = state.contents.filter((task) => task.id !== id);     
+      state.taskLists.contents = state.contents.filter((task) => task.id !== id);     
 },  
   }, 
 });
