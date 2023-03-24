@@ -4,33 +4,33 @@ import { addTask,editTask,deleteTask } from './features/Tasks';
 import { useState } from 'react';
 import { v4 as uuidv4 } from "uuid";
 
-
 function App() {
   //useSelectorでstoreの状態にアクセス
-  const [task, setTask] = useState("");
+  const [newTaskText, setNewTaskText] = useState("");
+  const [taskId, setTaskId] = useState(uuidv4())
   const [editInputTask, setEditInputTask] = useState();
-  const [taskIndex, setTaskIndex] = useState(null)
   const taskList = useSelector((state) => state.tasks);
-
-
-
 
   const dispatch = useDispatch();
   const addTaskClick = () => {
  
-    if (task === "")
+    if (newTaskText === "")
     return
+    setTaskId(uuidv4())
     dispatch(
-      addTask(  
-        
-        task,
+      
+      addTask(   
+        {
+          id:taskId,
+          text:newTaskText,
+        }
         )
         );
-        setTask("");
+        setNewTaskText("");
   };
 
-  const editTaskClick = (index) => {
-    setTaskIndex(index)
+  const editTaskClick = (id) => {
+    setTaskId(id)
     console.log(taskList.contents);
   }
   
@@ -42,69 +42,70 @@ function App() {
    
     e.preventDefault();
     dispatch(
-      editTask(   
-        {
-          index: taskIndex,
-          text: editInputTask
+      editTask(  
+         {
+          text: editInputTask,
+          id: taskId
          }
         )
         );
         setEditInputTask("");
-        setTaskIndex(null);
-
-    //ディスパッチしてエディットタスクに　配列番号とインプットコンテントを渡す
+        setTaskId(uuidv4())
+    //ディスパッチしてエディットタスクに配列番号とインプットコンテントを渡す
     //stateの初期化
   };
 
-  const deleteTaskClick = (index) => {
+  const deleteTaskClick = (id) => {
    
     dispatch(
-      deleteTask( 
-         index
+      deleteTask(
+        {
+          id
+        } 
         )
     )
   }
 
   return (
     <div className="App">
-       <div className="addTodo">
+       <div className="addTodo"
+       >
           <input type="text"
             placeholder='Todoを入力'
-            onChange={(e) => setTask(e.target.value)}
-            value={task}/>
+            onChange={(e) => setNewTaskText(e.target.value)}
+            value={newTaskText}/>
           <button onClick={() => addTaskClick()}>追加</button>
           <hr/>
         </div>
 
         <h1>{taskList.title}</h1>
         <div className='displayTask'>
-          {taskList.contents.map((task,index) => (           
+          {taskList.contents.map((task) => (           
             <div 
-            key={index} 
+            key={task.id} 
             className="task"     
             >
               <div className="taskContents"
-                onClick= {() => editTaskClick(index)}>
+                onClick= {() => editTaskClick(task.id)}>
                 { 
-                  (taskIndex === index) ? (
+                  (taskId === task.id) ? (
                   //編集したいインデックスとマップのインデックスが一致してるか      
                   <form onSubmit={handleSubmit}>
                     <input 
                       type='text' 
                       onChange={handleChange} 
-                      defaultValue={task}
+                      defaultValue={task.text}
                     />
                   </form>
                     ) : (
-                      <h3 > {task}</h3>
+                      <h3 > {task.text}</h3>
                     )}
               </div>
-              <button onClick= {() => deleteTaskClick(task,index)}>削除</button>
+              <button onClick= {() => deleteTaskClick(task.id)}>削除</button>
             </div>
           ))}
         </div>
     </div>
-    
   );
 }
 
