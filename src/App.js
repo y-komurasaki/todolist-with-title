@@ -7,94 +7,121 @@ import { v4 as uuidv4 } from "uuid";
 function App() {
   //useSelectorでstoreの状態にアクセス
   const [newListTitleText, setNewListTitleText] = useState("");
-  const [listId, setListId] = useState(uuidv4())
+  //リストのタイトルのテキスト情報
+  const [listId, setListId] = useState(0)
+  //リスト自体の存在を管理するためのId
   const [newTaskText, setNewTaskText] = useState("");
-  const [taskId, setTaskId] = useState(uuidv4())
+  //新しいタスクを生成したときのtext情報
+  const [taskId, setTaskId] = useState(0)
+  //タスク自体の存在を管理するためのId
   const [editInputTaskText, setEditInputTaskText] = useState();
-  const tasks = useSelector((state) => state.tasks);
+  //タスク編集時の新たに更新するtext情報
 
+  const tasks = useSelector((state) => state.tasks);
+  //sliceとの状態保持した情報やりとりさせるためメソッドを扱えるようにした変数
   const dispatch = useDispatch();
+  //下記dispatchで全てsliceのaction.payloadに渡すためのメソッドを扱えるようにした変数
+
   const addTaskListClick = () => {
     if (newListTitleText === "")
     return
-    setListId(uuidv4())
+    //textの中身が空白なら登録せず返却
+    setListId(uuidv4());
+    //リスト生成時にuniqueな重複しないidをuuidで設定
+    //初期値で引っ張ると同じidが重複してしまうためこのタイミング
+    
     dispatch(
       
     addTaskList(   
         {
           listId:listId,
+          //生成時にsetしたuniqueなIdの状態を持ったlistId
           newTitleText:newListTitleText,
+          //タイトル入力フォームで入力したtext情報
         }
       )
     );
     setNewListTitleText("");
+    //入力フォームを空にするための処理
     console.log(listId)
   }
 
-  const addTaskClick = (listId) => {
- 
+  const addTaskClick = (currentListId) => {
+    //引数で現在クリックしているタスクの親リストのlistIdを受け取る
     if (newTaskText === "")
     return
-    setTaskId(uuidv4());
+    setTaskId(uuidv4())
+    //タスク生成時にuniqueな重複しないidをuuidで設定
+    //初期値で引っ張ると同じidが重複してしまうためこのタイミング
     dispatch(
       
       addTask(   
         {
-          listId:listId,
+          listId:currentListId,
+          //引数で受け取った追加しようとしているタスクのlistId
           taskId:taskId,
+          //生成時にsetしたuniqueなIdの状態を持ったtaskId
           newText:newTaskText,
+          //Todoフォームで入力したtext情報
         }
         )
         );
         setNewTaskText("");  
-        console.log(listId)
-        console.log(taskId)   
+        //入力フォームを空にするための処理
   };
+  console.log(listId)
+  console.log(taskId) 
 
 
-  const editTaskClick = (listId,taskId) => {
-    setListId(listId)
-    setTaskId(taskId)
+  const editTaskClick = (currentListId,currentTaskId) => {
+    setListId(currentListId);
+    setTaskId(currentTaskId);
+    //関数の外で現在編集中のIdを使いたい為useStateで設定
   }
   console.log(listId)
   console.log(taskId)
   
-  const handleChange = (e) => {
+  const editTextChange = (e) => {
     setEditInputTaskText(e.target.value);
+        //タスク編集時に展開した入力フォームに入力したtext情報
   }
 
-  const handleSubmit = (e) => {
-
-
+  const editDataSubmit = (e) => {
     e.preventDefault();
     dispatch(
       editTask(  
-         {
+          {
           listId:listId,
           taskId:taskId,
           editText: editInputTaskText,
-         }
+          }
         )
-        );
+      );
+      console.log(listId)
+      console.log(taskId)
 
 
       if (editInputTaskText === "")
       return
-      
         setEditInputTaskText("");
-        setTaskId(uuidv4())
-        console.log(taskId)
-  };
+        setListId(uuidv4)
+        setTaskId(uuidv4)
 
-  const deleteTaskClick = (id) => {
-    console.log(taskId)
+  };
+  console.log(listId)
+  console.log(taskId)
+
+  function deleteTaskClick(currentListId, currentTaskId) {
+    console.log(currentListId);
+    console.log(currentTaskId);
     dispatch(
       deleteTask(
         {
-          id
-        } 
-        )
-    )
+          listId: currentListId,
+          taskId: currentTaskId,
+        }
+      )
+    );
   }
 
   return (
@@ -103,6 +130,7 @@ function App() {
             type="text"
             placeholder='タイトルを入力'
             onChange={(e) => setNewListTitleText(e.target.value)}
+            //入力したtextの状態をsetNewListTitleTexで保時
           />
           <button onClick={() => addTaskListClick()}>追加</button>
       <div className="taskLists">
@@ -126,23 +154,25 @@ function App() {
                 key={task.id} 
                 className="task"     
                 >
-                  <div className="taskContents"
-                    onClick= {() => editTaskClick(list.listId,task.id)}>
+                  <div 
+                   onClick= {() => editTaskClick(list.listId,task.id)}
+                  className="taskContents"
+                  >
                     { 
                       (taskId === task.id) ? (
                       //編集したいインデックスとマップのインデックスが一致してるか      
-                      <form onSubmit={handleSubmit}>
+                      <form onSubmit={editDataSubmit}>
                         <input 
                           type='text' 
-                          onChange={handleChange} 
+                          onChange={editTextChange} 
                           defaultValue={task.text}
                         />
                       </form>
                         ) : (
-                          <h3 > {task.text}</h3>
+                          <h3> {task.text}</h3>
                         )}
                   </div>
-                  <button onClick= {() => deleteTaskClick(task.id)}>削除</button>
+                  <button onClick= {() => deleteTaskClick(list.listId,task.id)}>削除</button>
                 </div>
               ))}
             </div>
