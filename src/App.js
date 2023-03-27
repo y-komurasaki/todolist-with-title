@@ -29,7 +29,6 @@ function App() {
     setListId(uuidv4());
     //リスト生成時にuniqueな重複しないidをuuidで設定
     //初期値で引っ張ると同じidが重複してしまうためこのタイミング
-    
     dispatch(
       
     addTaskList(   
@@ -61,7 +60,7 @@ function App() {
           //引数で受け取った追加しようとしているタスクのlistId
           taskId:taskId,
           //生成時にsetしたuniqueなIdの状態を持ったtaskId
-          newText:newTaskText,
+          newTaskText:newTaskText,
           //Todoフォームで入力したtext情報
         }
         )
@@ -72,53 +71,59 @@ function App() {
   console.log(listId)
   console.log(taskId) 
 
-
   const editTaskClick = (currentListId,currentTaskId) => {
     setListId(currentListId);
     setTaskId(currentTaskId);
-    //関数の外で現在編集中のIdを使いたい為useStateで設定
+    //引数で現在クリックしているリストid情報とタスクid情報を受け取り既存のidと一致させフォームを展開して役割を終える。
   }
   console.log(listId)
   console.log(taskId)
+  //Task.jsのスプレッド構文で新たに配列を展開しているので初期値のid0になる
   
   const editTextChange = (e) => {
     setEditInputTaskText(e.target.value);
         //タスク編集時に展開した入力フォームに入力したtext情報
   }
+  console.log(listId)
+  console.log(taskId)
+  
 
   const editDataSubmit = (e) => {
+    setListId(uuidv4)
+    setTaskId(uuidv4)
+    //レンダリングされた際スプレッド構文で初期化されてたidにuuidを入れる
     e.preventDefault();
     dispatch(
       editTask(  
           {
           listId:listId,
+          //現在フォームが展開しているタスクのid情報
           taskId:taskId,
+          //現在フォームが展開しているタスクのid情報
           editText: editInputTaskText,
+          //編集フォーム入力したtext情報
           }
         )
       );
       console.log(listId)
       console.log(taskId)
-
-
+      console.log(editInputTaskText)
       if (editInputTaskText === "")
       return
         setEditInputTaskText("");
-        setListId(uuidv4)
-        setTaskId(uuidv4)
-
+        //編集テキストフォームを空にして初期化する
   };
   console.log(listId)
   console.log(taskId)
 
-  function deleteTaskClick(currentListId, currentTaskId) {
-    console.log(currentListId);
-    console.log(currentTaskId);
+  const deleteTaskClick = (currentListId, currentTaskId) =>  {
+    //引数で現在クリックしているリストid情報とタスクid情報を受けとる
     dispatch(
       deleteTask(
         {
-          listId: currentListId,
-          taskId: currentTaskId,
+          listId: currentListId, 
+          taskId: currentTaskId
+          //引数で現在クリックしているリストid情報とタスクid情報
         }
       )
     );
@@ -160,7 +165,7 @@ function App() {
                   >
                     { 
                       (taskId === task.id) ? (
-                      //編集したいインデックスとマップのインデックスが一致してるか      
+                      //編集したいidとマップのidが一致してるならフォームを展開する    
                       <form onSubmit={editDataSubmit}>
                         <input 
                           type='text' 
