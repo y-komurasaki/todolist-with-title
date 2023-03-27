@@ -109,7 +109,12 @@ function App() {
       console.log(taskId)
       console.log(editInputTaskText)
       if (editInputTaskText === "")
-      return
+      return dispatch(
+        deleteTask({
+          listId:listId,
+          taskId:taskId,
+        }));
+        //編集中テキストが空の場合はdeleteTaskの処理を実行
         setEditInputTaskText("");
         //編集テキストフォームを空にして初期化する
   };
