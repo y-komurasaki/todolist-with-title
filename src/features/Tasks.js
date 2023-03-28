@@ -43,7 +43,8 @@ const tasksSlice = createSlice({
 
 
     editTask: (state, action) => {
-      const { taskId, editText, listId } = action.payload;
+      const {  listId, taskId, editText, } = action.payload;
+      console.log(action.payload)
       //現在クリックしているリストのid、タスクのidと編集で入力したテキスト情報を取得
       state.taskLists = state.taskLists.map((taskList) => {
         //map関数でリストを1つずつ展開する
