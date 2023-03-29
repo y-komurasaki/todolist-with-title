@@ -4,7 +4,7 @@ const initialState =
   { 
     taskLists:[
       {title:`test`,
-      id:0,
+       listId:1,
         contents: [{id:1,text:"test"}]
       },
     ],
@@ -21,6 +21,21 @@ const tasksSlice = createSlice({
         contents: [],
         //タイトルのテキスト情報、リスト自体のid,contents{タスク}を入れる配列生成
       });
+    },
+
+    editTaskList: (state, action) => {
+      const { listId, editListTitleText } = action.payload;
+      //現在クリックしているリストのidと編集で入力したタイトルテキスト情報を取得
+      state.taskLists = state.taskLists.map((taskList) => (
+         //map関数でリストを1つずつ展開する
+        taskList.listId === listId ? 
+        //展開しているリストidと現在クリックしているタスクidが一致するか確認
+        { ...taskList, title: editListTitleText} 
+        //タスクが一致した場合スプレッド構文でタスクを展開した後、編集で入力したテキストに更新する
+        : taskList
+        //リストが一致しない場合そのまま返す
+      ));
+
     },
 
     addTask: (state, action) => {
@@ -85,5 +100,5 @@ const tasksSlice = createSlice({
   }, 
 });
 
-export const {addTaskList,addTask,editTask,deleteTask} = tasksSlice.actions;
+export const {addTaskList,editTaskList,addTask,editTask,deleteTask} = tasksSlice.actions;
 export default tasksSlice.reducer; //reducerをstore.jsに渡す

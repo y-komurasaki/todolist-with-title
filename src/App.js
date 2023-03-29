@@ -1,21 +1,27 @@
 import './App.css';
 import { useSelector, useDispatch } from 'react-redux';
-import { addTaskList,addTask,editTask,deleteTask } from './features/Tasks';
+import { addTaskList,editTaskList,addTask,editTask,deleteTask } from './features/Tasks';
 import { useState } from 'react';
 import { v4 as uuidv4 } from "uuid";
 
 function App() {
+
   const [newListTitleText, setNewListTitleText] = useState("");
   //リストのタイトルのテキスト情報
   const [listId, setListId] = useState(0)
   //リスト自体の存在を管理するためのId
+  const [editListTitleText, setEditListTitleText] = useState("");
+  //タスク編集時の新たに更新するtext情報
+  const [editListId, setEditListId] = useState(null)
+  //現在クリックしているリストタイトルを編集フォームを展開させるためのid
   const [newTaskText, setNewTaskText] = useState("");
   //新しいタスクを生成したときのtext情報
   const [taskId, setTaskId] = useState(0)
   //タスク自体の存在を管理するためのId
   const [editInputTaskText, setEditInputTaskText] = useState();
   //タスク編集時の新たに更新するtext情報
-
+  const [editTaskId, setEditTaskId] = useState(null)
+  //現在クリックしているタスクを編集フォームを展開させるためのid
   const tasks = useSelector((state) => state.tasks);
   //sliceとの状態保持した情報やりとりさせるためメソッドを扱えるようにした変数
   const dispatch = useDispatch();
@@ -43,6 +49,33 @@ function App() {
     //入力フォームを空にするための処理
   }
 
+  const editTitleClick = (currentListId) => {
+    setEditListId(currentListId);
+    //引数で現在クリックしているリストid情報とタスクid情報を受け取り既存のidと一致させフォームを展開して役割を終える。
+  }
+  
+  const editTitleTextChange = (e) => {
+    setEditListTitleText(e.target.value);
+    //タイトル編集時に展開した入力フォームに入力したtext情報
+  }
+  
+  const editTitleDataSubmit = (e, currentListId) => {
+    e.preventDefault();
+    dispatch(
+      editTaskList(  
+          {
+          listId:currentListId,
+          //現在フォームが展開しているタスクのid情報
+          editListTitleText: editListTitleText,
+          //編集フォーム入力したtext情報
+          }
+        )
+      );
+        setEditInputTaskText("");
+        //編集テキストフォームを空にして初期化する
+        setEditListId(null)
+  };
+
   const addTaskClick = (currentListId) => {
     //引数で現在クリックしているタスクの親リストのlistIdを受け取る
     if (newTaskText === "")
@@ -67,8 +100,8 @@ function App() {
         //入力フォームを空にするための処理
   };
 
-  const editTaskClick = (currentListId) => {
-    setTaskId(currentListId)
+  const editTaskClick = (currentTaskId) => {
+    setEditTaskId(currentTaskId)
     //引数で現在クリックしているリストid情報とタスクid情報を受け取り既存のidと一致させフォームを展開して役割を終える。
   }
   
@@ -76,10 +109,9 @@ function App() {
     setEditInputTaskText(e.target.value);
         //タスク編集時に展開した入力フォームに入力したtext情報
   }
-  
+
 
   const editDataSubmit = (e,currentListId, currentTaskId) => {
-    //レンダリングされた際スプレッド構文で初期化されてたidにuuidを入れる
     e.preventDefault();
     dispatch(
       editTask(  
@@ -102,7 +134,7 @@ function App() {
         //編集中テキストが空の場合はdeleteTaskの処理を実行
         setEditInputTaskText("");
         //編集テキストフォームを空にして初期化する
-        setTaskId(null)
+        setEditTaskId(null)
         //taskIdをnullにしてフォームが閉じた状態を戻す
   };
 
@@ -130,10 +162,25 @@ function App() {
           <button onClick={() => addTaskListClick()}>追加</button>
       <div className="taskLists">
       {tasks.taskLists.map((list) => (
-        <div key={list.id} className="taskList">
+        <div key={list.listId} className="taskList">
+          <div 
+            onClick= {() => editTitleClick(list.listId)}
+            className="listContents"
+          >
+          { 
+          (editListId === list.listId) ? (
+          //編集したいidとマップのidが一致してるならフォームを展開する    
+          <form onSubmit={(e) => editTitleDataSubmit(e, list.listId)}>
+            <input 
+              type='text' 
+              onChange={editTitleTextChange} 
+              defaultValue={list.title}
+              key={list.listId}
+            />
+          </form>
+            ) : (<h1 key={list.listId}> {list.title}</h1> )}
           <hr/>
-            <h1>{list.title}</h1>
-          <hr/>
+        </div>
           <div className="addTodo" >
             <input
               type="text"
@@ -154,7 +201,7 @@ function App() {
                   className="taskContents"
                   >
                     { 
-                      (taskId === task.id) ? (
+                      (editTaskId === task.id) ? (
                       //編集したいidとマップのidが一致してるならフォームを展開する    
                       <form onSubmit={(e) => editDataSubmit(e, list.listId,task.id)}>
                         <input 
@@ -179,5 +226,3 @@ function App() {
 }
 
 export default App;
-
-
