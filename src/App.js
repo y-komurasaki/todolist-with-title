@@ -76,7 +76,7 @@ function App() {
         setEditListId(null)
   };
 
-  const addTaskClick = (currentListId) => {
+  const addTaskClick = (currentTaskId) => {
     //引数で現在クリックしているタスクの親リストのlistIdを受け取る
     if (newTaskText === "")
     return
@@ -87,7 +87,7 @@ function App() {
       
       addTask(   
         {
-          listId:currentListId,
+          listId:currentTaskId,
           //引数で受け取った追加しようとしているタスクのlistId
           taskId:taskId,
           //生成時にsetしたuniqueなIdの状態を持ったtaskId
