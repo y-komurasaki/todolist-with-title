@@ -1,6 +1,6 @@
 import './App.css';
 import { useSelector, useDispatch } from 'react-redux';
-import { addTaskList,editTaskList,addTask,editTask,deleteTask } from './features/Tasks';
+import { addTaskList,editTaskList,deleteTaskList,addTask,editTask,deleteTask } from './features/Tasks';
 import { useState } from 'react';
 import { v4 as uuidv4 } from "uuid";
 
@@ -71,10 +71,28 @@ function App() {
           }
         )
       );
+      if (editListTitleText === "")
+      return dispatch(
+        deleteTaskList({
+          listId:currentListId,
+        }));
+        //編集中テキストが空の場合はdeleteTaskの処理を実行
         setEditInputTaskText("");
         //編集テキストフォームを空にして初期化する
         setEditListId(null)
   };
+
+  const deleteTaskListClick = (currentListId) =>{
+    //現在クリックしているタスクidを情報を受け取る
+    dispatch(
+      deleteTaskList(
+        {
+          listId: currentListId, 
+          //引数で現在クリックしているリストid情報
+        }
+      )
+    );
+  }
 
   const addTaskClick = (currentTaskId) => {
     //引数で現在クリックしているタスクの親リストのlistIdを受け取る
@@ -178,7 +196,8 @@ function App() {
               key={list.listId}
             />
           </form>
-            ) : (<h1 key={list.listId}> {list.title}</h1> )}
+            ) : (<h1> {list.title}</h1> )}
+              <button onClick= {() => deleteTaskListClick(list.listId)}>削除</button>
           <hr/>
         </div>
           <div className="addTodo" >

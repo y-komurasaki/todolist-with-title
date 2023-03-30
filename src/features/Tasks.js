@@ -35,7 +35,14 @@ const tasksSlice = createSlice({
         : taskList
         //リストが一致しない場合そのまま返す
       ));
+    },
 
+    deleteTaskList: (state, action) => { 
+      const { listId } = action.payload;
+      console.log(listId)
+      //現在クリックしているリストのidを取得
+    state.taskLists = state.taskLists.filter((taskList) => taskList.listId !== listId)
+          //リストが一致した場合filter関数で一致しないリストだけ残す（一致するリストだけ除外する）
     },
 
     addTask: (state, action) => {
@@ -100,5 +107,5 @@ const tasksSlice = createSlice({
   }, 
 });
 
-export const {addTaskList,editTaskList,addTask,editTask,deleteTask} = tasksSlice.actions;
+export const {addTaskList,editTaskList,deleteTaskList,addTask,editTask,deleteTask} = tasksSlice.actions;
 export default tasksSlice.reducer; //reducerをstore.jsに渡す
