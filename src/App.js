@@ -52,18 +52,12 @@ function App() {
   const editTitleClick = (currentListId,currentTitleText) => {
     setEditListId(currentListId);
     //引数で現在クリックしているリストid情報とタスクid情報を受け取り既存のidと一致させフォームを展開して役割を終える。
-    setEditInputTaskText(currentTitleText)
+    setEditListTitleText(currentTitleText)
     //現在のタイトルtext情報の状態を持たせる
   }
-  
   const editTitleTextChange = (e) => {
-    if(e.target.value !== editInputTaskText){
-      //入力したtextと現在のtextの状態が違うなら処理を実行する
       setEditListTitleText(e.target.value);
-     //実行した場合入力した文字がInputTitleTextにセットされる
-    }
-    //タイトル編集時に展開した入力フォームに入力したtext情報
-
+     //入力した文字がInputTitleTextにセットされる
   }
   
   const editTitleDataSubmit = (e, currentListId) => {
@@ -134,11 +128,10 @@ function App() {
   }
   
   const editTextChange = (e) => {
-    if (e.target.value !== editInputTaskText) {
-      //入力したtextと現在のtextの状態が違うなら処理を実行する
+
       setEditInputTaskText(e.target.value);
       //実行した場合入力した文字がInputTaskTextにセットされる
-    }
+
     console.log(editInputTaskText)
         //タスク編集時に展開した入力フォームに入力したtext情報
   }
