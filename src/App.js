@@ -49,14 +49,21 @@ function App() {
     //入力フォームを空にするための処理
   }
 
-  const editTitleClick = (currentListId) => {
+  const editTitleClick = (currentListId,currentTitleText) => {
     setEditListId(currentListId);
     //引数で現在クリックしているリストid情報とタスクid情報を受け取り既存のidと一致させフォームを展開して役割を終える。
+    setEditInputTaskText(currentTitleText)
+    //現在のタイトルtext情報の状態を持たせる
   }
   
   const editTitleTextChange = (e) => {
-    setEditListTitleText(e.target.value);
+    if(e.target.value !== editInputTaskText){
+      //入力したtextと現在のtextの状態が違うなら処理を実行する
+      setEditListTitleText(e.target.value);
+     //実行した場合入力した文字がInputTitleTextにセットされる
+    }
     //タイトル編集時に展開した入力フォームに入力したtext情報
+
   }
   
   const editTitleDataSubmit = (e, currentListId) => {
@@ -118,13 +125,21 @@ function App() {
         //入力フォームを空にするための処理
   };
 
-  const editTaskClick = (currentTaskId) => {
+  const editTaskClick = (currentTaskId, currentTaskText) => {
     setEditTaskId(currentTaskId)
     //引数で現在クリックしているリストid情報とタスクid情報を受け取り既存のidと一致させフォームを展開して役割を終える。
+    setEditInputTaskText(currentTaskText)
+    //現在のtext情報の状態を持たせる
+    console.log(editInputTaskText)
   }
   
   const editTextChange = (e) => {
-    setEditInputTaskText(e.target.value);
+    if (e.target.value !== editInputTaskText) {
+      //入力したtextと現在のtextの状態が違うなら処理を実行する
+      setEditInputTaskText(e.target.value);
+      //実行した場合入力した文字がInputTaskTextにセットされる
+    }
+    console.log(editInputTaskText)
         //タスク編集時に展開した入力フォームに入力したtext情報
   }
 
@@ -182,7 +197,7 @@ function App() {
       {tasks.taskLists.map((list) => (
         <div key={list.listId} className="taskList">
           <div 
-            onClick= {() => editTitleClick(list.listId)}
+            onClick= {() => editTitleClick(list.listId,list.title)}
             className="listContents"
           >
           { 
@@ -216,7 +231,7 @@ function App() {
                 className="task"     
                 >
                   <div 
-                   onClick= {() => editTaskClick(task.id)}
+                   onClick= {() => editTaskClick(task.id,task.text)}
                   className="taskContents"
                   >
                     { 
