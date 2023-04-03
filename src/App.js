@@ -1,4 +1,4 @@
-import './App.css';
+import './App.scss';
 import { useSelector, useDispatch } from 'react-redux';
 import { addTaskList,editTaskList,deleteTaskList,addTask,editTask,deleteTask } from './features/Tasks';
 import { useState } from 'react';
