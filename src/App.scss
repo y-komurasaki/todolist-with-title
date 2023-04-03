@@ -4,7 +4,24 @@
   .taskLists {
     display: flex;   
     justify-content: center;
+    
   }
+  .listAddButton{
+    font-size: 30px;
+    cursor: pointer;
+  }
+  .listAddButton:hover{
+     color: green;
+  }
+
+  .listDeleteButton{
+    cursor: pointer;
+    
+  }
+  .listDeleteButton:hover{
+    color: red;
+  }
+
   .inputTitleContents{
     display: flex; 
     justify-content: center;
@@ -37,6 +54,21 @@
     margin-right: 5px;
   }
 
+  .addTodoButton{
+    font-size: 20px;
+    cursor: pointer;
+  }
+  .addTodoButton:hover{
+     color: green;
+  }
+
+  .taskDeleteButton{
+    font-size: 20px;
+    cursor: pointer;
+  }
+  .taskDeleteButton:hover{
+    color: red;
+  }
   .taskList {
     margin: 20px;
     padding: 20px;

@@ -3,6 +3,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import { addTaskList,editTaskList,deleteTaskList,addTask,editTask,deleteTask } from './features/Tasks';
 import { useState } from 'react';
 import { v4 as uuidv4 } from "uuid";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { faSquarePlus } from "@fortawesome/free-solid-svg-icons";
+
 
 function App() {
 
@@ -131,9 +135,7 @@ function App() {
 
       setEditInputTaskText(e.target.value);
       //実行した場合入力した文字がInputTaskTextにセットされる
-
-    console.log(editInputTaskText)
-        //タスク編集時に展開した入力フォームに入力したtext情報
+      //タスク編集時に展開した入力フォームに入力したtext情報
   }
 
 
@@ -188,7 +190,8 @@ function App() {
           value={newListTitleText}
           className='inputTitle'
         />
-        <button className='listAddButton' onClick={() => addTaskListClick()}>追加</button>
+        <FontAwesomeIcon icon={faSquarePlus}  className='listAddButton' onClick={() => addTaskListClick()}></FontAwesomeIcon>
+        
       </div>
 
       <div className="taskLists">
@@ -210,8 +213,7 @@ function App() {
             />
           </form>
             ) : (<p> {list.title}</p> )}
-              <button onClick= {() => deleteTaskListClick(list.listId)}>削除</button>
-          <hr/>
+              <FontAwesomeIcon className='listDeleteButton' icon={faTrashCan} onClick= {() => deleteTaskListClick(list.listId)}></FontAwesomeIcon>
         </div>
           <div className="addTodoContents" >
             <input
@@ -225,7 +227,7 @@ function App() {
               value={newTaskText[list.listId]||""}
               className="inputTodo"
             />
-           <button onClick={() => addTaskClick(list.listId)}>追加</button>
+           <FontAwesomeIcon className='addTodoButton' icon={faSquarePlus} onClick={() => addTaskClick(list.listId)}></FontAwesomeIcon>
           </div>
             <div className='displayTask'>
               {list.contents.map((task) => (           
@@ -251,7 +253,7 @@ function App() {
                           <h3> {task.text}</h3>
                         )}
                   </div>
-                  <button onClick= {() => deleteTaskClick(list.listId,task.id)}>削除</button>
+                  <FontAwesomeIcon className='taskDeleteButton' icon={faTrashCan} onClick= {() => deleteTaskClick(list.listId,task.id)}>削除</FontAwesomeIcon>
                 </div>
               ))}
             </div>
