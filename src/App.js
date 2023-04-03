@@ -14,7 +14,7 @@ function App() {
   //タスク編集時の新たに更新するtext情報
   const [editListId, setEditListId] = useState(null)
   //現在クリックしているリストタイトルを編集フォームを展開させるためのid
-  const [newTaskText, setNewTaskText] = useState("");
+  const [newTaskText, setNewTaskText] = useState({});
   //新しいタスクを生成したときのtext情報
   const [taskId, setTaskId] = useState(0)
   //タスク自体の存在を管理するためのId
@@ -95,9 +95,9 @@ function App() {
     );
   }
 
-  const addTaskClick = (currentTaskId) => {
+  const addTaskClick = (currentListId) => {
     //引数で現在クリックしているタスクの親リストのlistIdを受け取る
-    if (newTaskText === "")
+    if (newTaskText[currentListId] === "")
     return
     setTaskId(uuidv4())
     //タスク生成時にuniqueな重複しないidをuuidで設定
@@ -106,16 +106,19 @@ function App() {
       
       addTask(   
         {
-          listId:currentTaskId,
+          listId:currentListId,
           //引数で受け取った追加しようとしているタスクのlistId
           taskId:taskId,
           //生成時にsetしたuniqueなIdの状態を持ったtaskId
-          newTaskText:newTaskText,
+          newTaskText:newTaskText[currentListId],
           //Todoフォームで入力したtext情報
         }
         )
         );
-        setNewTaskText("");  
+        setNewTaskText({
+          ...newTaskText,
+          [currentListId]:""
+        });  
         //入力フォームを空にするための処理
   };
 
@@ -212,8 +215,12 @@ function App() {
             <input
               type="text"
               placeholder='Todoを入力'
-              onChange={(e) => setNewTaskText(e.target.value)}
-              value={newTaskText}
+              onChange={(e) => 
+                setNewTaskText({
+                  ...newTaskText,
+                  [list.listId]:e.target.value
+                })}
+              value={newTaskText[list.listId]||""}
             />
            <button onClick={() => addTaskClick(list.listId)}>追加</button>
           </div>
