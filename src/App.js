@@ -8,7 +8,6 @@ function App() {
 
   const [newListTitleText, setNewListTitleText] = useState("");
   //リストのタイトルのテキスト情報
-  const [listId, setListId] = useState(0)
   //リスト自体の存在を管理するためのId
   const [editListTitleText, setEditListTitleText] = useState("");
   //タスク編集時の新たに更新するtext情報
@@ -16,8 +15,6 @@ function App() {
   //現在クリックしているリストタイトルを編集フォームを展開させるためのid
   const [newTaskText, setNewTaskText] = useState({});
   //新しいタスクを生成したときのtext情報
-  const [taskId, setTaskId] = useState(0)
-  //タスク自体の存在を管理するためのId
   const [editInputTaskText, setEditInputTaskText] = useState();
   //タスク編集時の新たに更新するtext情報
   const [editTaskId, setEditTaskId] = useState(null)
@@ -31,7 +28,8 @@ function App() {
     if (newListTitleText === "")
     return
     //textの中身が空白なら登録せず返却
-    setListId(uuidv4());
+    const listId = uuidv4()
+    console.log(`listId:`,listId)
     //リスト生成時にuniqueな重複しないidをuuidで設定
     //初期値で引っ張ると同じidが重複してしまうためこのタイミング
     dispatch(
@@ -99,7 +97,8 @@ function App() {
     //引数で現在クリックしているタスクの親リストのlistIdを受け取る
     if (newTaskText[currentListId] === "")
     return
-    setTaskId(uuidv4())
+    const taskId = uuidv4()
+    console.log(`taskId:`,taskId)
     //タスク生成時にuniqueな重複しないidをuuidで設定
     //初期値で引っ張ると同じidが重複してしまうためこのタイミング
     dispatch(
@@ -187,6 +186,7 @@ function App() {
             placeholder='タイトルを入力'
             onChange={(e) => setNewListTitleText(e.target.value)}
             //入力したtextの状態をsetNewListTitleTexで保時
+            value={newListTitleText}
           />
           <button onClick={() => addTaskListClick()}>追加</button>
       <div className="taskLists">

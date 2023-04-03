@@ -4,8 +4,8 @@ const initialState =
   { 
     taskLists:[
       {title:`test`,
-       listId:1,
-        contents: [{id:1,text:"test"}]
+       listId:0,
+        contents: [{id:0,text:"test"}]
       },
     ],
   }
