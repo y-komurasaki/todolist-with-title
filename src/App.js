@@ -29,7 +29,6 @@ function App() {
     return
     //textの中身が空白なら登録せず返却
     const listId = uuidv4()
-    console.log(`listId:`,listId)
     //リスト生成時にuniqueな重複しないidをuuidで設定
     //初期値で引っ張ると同じidが重複してしまうためこのタイミング
     dispatch(
@@ -98,7 +97,6 @@ function App() {
     if (newTaskText[currentListId] === "")
     return
     const taskId = uuidv4()
-    console.log(`taskId:`,taskId)
     //タスク生成時にuniqueな重複しないidをuuidで設定
     //初期値で引っ張ると同じidが重複してしまうためこのタイミング
     dispatch(
@@ -181,20 +179,24 @@ function App() {
 
   return (
     <div className="App">
-          <input 
-            type="text"
-            placeholder='タイトルを入力'
-            onChange={(e) => setNewListTitleText(e.target.value)}
-            //入力したtextの状態をsetNewListTitleTexで保時
-            value={newListTitleText}
-          />
-          <button onClick={() => addTaskListClick()}>追加</button>
+      <div className='inputTitleContents'>
+        <input 
+          type="text"
+          placeholder='タイトルを入力'
+          onChange={(e) => setNewListTitleText(e.target.value)}
+          //入力したtextの状態をsetNewListTitleTexで保時
+          value={newListTitleText}
+          className='inputTitle'
+        />
+        <button className='listAddButton' onClick={() => addTaskListClick()}>追加</button>
+      </div>
+
       <div className="taskLists">
       {tasks.taskLists.map((list) => (
         <div key={list.listId} className="taskList">
           <div 
             onClick= {() => editTitleClick(list.listId,list.title)}
-            className="listContents"
+            className="listTitles"
           >
           { 
           (editListId === list.listId) ? (
@@ -207,11 +209,11 @@ function App() {
               key={list.listId}
             />
           </form>
-            ) : (<h1> {list.title}</h1> )}
+            ) : (<p> {list.title}</p> )}
               <button onClick= {() => deleteTaskListClick(list.listId)}>削除</button>
           <hr/>
         </div>
-          <div className="addTodo" >
+          <div className="addTodoContents" >
             <input
               type="text"
               placeholder='Todoを入力'
@@ -221,6 +223,7 @@ function App() {
                   [list.listId]:e.target.value
                 })}
               value={newTaskText[list.listId]||""}
+              className="inputTodo"
             />
            <button onClick={() => addTaskClick(list.listId)}>追加</button>
           </div>

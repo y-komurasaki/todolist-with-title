@@ -1,4 +1,59 @@
 .App {
   text-align: center;
+
+  .taskLists {
+    display: flex;   
+    justify-content: center;
+  }
+  .inputTitleContents{
+    display: flex; 
+    justify-content: center;
+    margin: 20px;
+  }
+  .inputTitle{
+    margin-right: 5px;
+  }
+  .listTitles{
+    display: flex; 
+    justify-content: center; 
+    font-size: 1.8em;
+    padding: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+    font-weight: bold;
+    letter-spacing: 0.05em;
+
+  }
+  .listTitles p {
+    margin-right: 10px;
+  }
+
+  .addTodoContents{
+    display: flex; 
+    justify-content: space-between; 
+    margin: 20px;
+  }
+  .inputTodo{
+    margin-right: 5px;
+  }
+
+  .taskList {
+    margin: 20px;
+    padding: 20px;
+    background: #f1f1f1;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.22);
+  }
+
+  .task {
+    display: flex; 
+    justify-content: space-between; 
+    margin: 20px;
+    padding: 10px;
+    background: #f1f1f1fc;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.22);
+  }
+  
+
+
 }
 
