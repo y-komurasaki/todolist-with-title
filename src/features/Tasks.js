@@ -5,7 +5,7 @@ const initialState =
     taskLists:[
       {title:`test`,
        listId:0,
-        contents: [{id:0,text:"test"}]
+        contents: [{id:0,text:"test", completed:undefined}]
       },
     ],
   }
@@ -69,7 +69,7 @@ const tasksSlice = createSlice({
       console.log(action.payload)
       //現在クリックしているリストのid、タスクのidと編集で入力したテキスト情報を取得
       state.taskLists = state.taskLists.map((taskList) => {
-        //map関数でリストを1つずつ展開する
+        //map関数でリストを1つずつ展開する        
         if (taskList.listId === listId) {
         //展開してリストidと現在クリックしているリストidが一致するか確認
           const editContents = taskList.contents.map((task) => (
@@ -85,6 +85,31 @@ const tasksSlice = createSlice({
         }
         return taskList;
         //リストが一致しない場合そのまま返す
+      });
+    },
+
+    checkedTask: (state, action) => {
+      const { listId, taskId, taskCompleted } = action.payload;
+      console.log(taskCompleted)
+        
+      //現在のリストIdとタスクId、チェックボックスの値のtrue,falseを受け取る。
+      state.taskLists = state.taskLists.map((taskList) => {
+        //map関数でリストを1つずつ展開する  
+        if (taskList.listId === listId) {
+          //展開してリストidと現在クリックしているリストidが一致するか確認
+          taskList.contents = taskList.contents.map((task) =>
+          //map関数でタスクを1つずつ展開する 
+            task.id === taskId ? 
+            //展開しているタスクidと現在クリックしているタスクidが一致するか確認
+            { ...task, completed: !taskCompleted } 
+           //タスクが一致した場合スプレッド構文でリストを展開した後、taskCompletedの反対の値を配列に更新する
+            : task
+           //タスクが一致しない場合そのまま返す
+          );
+        }
+        return taskList;
+        //リストが一致しない場合そのまま返す
+        
       });
     },
 
@@ -107,5 +132,5 @@ const tasksSlice = createSlice({
   }, 
 });
 
-export const {addTaskList,editTaskList,deleteTaskList,addTask,editTask,deleteTask} = tasksSlice.actions;
+export const {addTaskList,editTaskList,deleteTaskList,addTask,editTask,deleteTask,checkedTask} = tasksSlice.actions;
 export default tasksSlice.reducer; //reducerをstore.jsに渡す

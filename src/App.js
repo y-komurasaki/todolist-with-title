@@ -1,6 +1,6 @@
 import './App.scss';
 import { useSelector, useDispatch } from 'react-redux';
-import { addTaskList,editTaskList,deleteTaskList,addTask,editTask,deleteTask } from './features/Tasks';
+import { addTaskList,editTaskList,deleteTaskList,addTask,editTask,deleteTask,checkedTask } from './features/Tasks';
 import { useState } from 'react';
 import { v4 as uuidv4 } from "uuid";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,7 +12,6 @@ function App() {
 
   const [newListTitleText, setNewListTitleText] = useState("");
   //リストのタイトルのテキスト情報
-  //リスト自体の存在を管理するためのId
   const [editListTitleText, setEditListTitleText] = useState("");
   //タスク編集時の新たに更新するtext情報
   const [editListId, setEditListId] = useState(null)
@@ -100,18 +99,18 @@ function App() {
     //引数で現在クリックしているタスクの親リストのlistIdを受け取る
     if (newTaskText[currentListId] === "")
     return
-    const taskId = uuidv4()
+    const taskId = uuidv4();
     //タスク生成時にuniqueな重複しないidをuuidで設定
     //初期値で引っ張ると同じidが重複してしまうためこのタイミング
     dispatch(
       
       addTask(   
         {
-          listId:currentListId,
+          listId: currentListId,
           //引数で受け取った追加しようとしているタスクのlistId
-          taskId:taskId,
+          taskId: taskId,
           //生成時にsetしたuniqueなIdの状態を持ったtaskId
-          newTaskText:newTaskText[currentListId],
+          newTaskText: newTaskText[currentListId],
           //Todoフォームで入力したtext情報
         }
         )
@@ -128,7 +127,6 @@ function App() {
     //引数で現在クリックしているリストid情報とタスクid情報を受け取り既存のidと一致させフォームを展開して役割を終える。
     setEditInputTaskText(currentTaskText)
     //現在のtext情報の状態を持たせる
-    console.log(editInputTaskText)
   }
   
   const editTextChange = (e) => {
@@ -166,17 +164,38 @@ function App() {
         //taskIdをnullにしてフォームが閉じた状態を戻す
   };
 
-  const deleteTaskClick = (currentListId, currentTaskId) =>  {
-    //引数で現在クリックしているリストid情報とタスクid情報を受けとる
+  const taskCheckedChange = (currentListId, currentTaskId, taskCompleted) => {
+    
+    //現在のリストIdとタスクId、チェックボックスの値e.target.checkedでtrue,falseを受け取る。
     dispatch(
-      deleteTask(
-        {
-          listId: currentListId, 
-          taskId: currentTaskId
-          //引数で現在クリックしているリストid情報とタスクid情報
-        }
-      )
-    );
+      checkedTask(
+       {
+        listId:currentListId,
+        taskId:currentTaskId,
+        taskCompleted:taskCompleted,
+      })
+      //上記で受け取った値をdispatchに渡す
+    )
+    console.log(taskCompleted)
+        
+  }
+
+  const deleteTaskClick = (currentListId, currentTaskId, taskCompleted) =>  {
+    //引数で現在クリックしているリストid情報とタスクid情報を受けとる
+     if(taskCompleted === false)
+     //チェックボックスが完了のタスクのみ削除を実装する
+      {
+      dispatch(
+        deleteTask(
+          {
+            listId: currentListId, 
+            taskId: currentTaskId
+            //引数で現在クリックしているリストid情報とタスクid情報
+          }
+        )
+      );
+     }
+
   }
 
   return (
@@ -230,11 +249,17 @@ function App() {
            <FontAwesomeIcon className='addTodoButton' icon={faSquarePlus} onClick={() => addTaskClick(list.listId)}></FontAwesomeIcon>
           </div>
             <div className='displayTask'>
-              {list.contents.map((task) => (           
+              {list.contents.map((task) => (                          
                 <div 
                 key={task.id} 
                 className="task"     
                 >
+                  <input
+                    type="checkbox"
+                    defaultChecked={task.completed}
+                    onChange={(e) => taskCheckedChange(list.listId, task.id, e.target.checked)}
+                  />
+                
                   <div 
                    onClick= {() => editTaskClick(task.id,task.text)}
                   className="taskContents"
@@ -253,7 +278,7 @@ function App() {
                           <h3> {task.text}</h3>
                         )}
                   </div>
-                  <FontAwesomeIcon className='taskDeleteButton' icon={faTrashCan} onClick= {() => deleteTaskClick(list.listId,task.id)}>削除</FontAwesomeIcon>
+                  <FontAwesomeIcon className='taskDeleteButton' icon={faTrashCan} onClick= {() => deleteTaskClick(list.listId,task.id,task.completed)}>削除</FontAwesomeIcon>
                 </div>
               ))}
             </div>
