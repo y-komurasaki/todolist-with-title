@@ -85,15 +85,18 @@ function App() {
 
   const deleteTaskListClick = (currentListId) =>{
     //現在クリックしているタスクidを情報を受け取る
+    const result = window.confirm("本当に削除しますか？");
+    if (result) {
+    //confirmメソッドで削除前のアラート表示
     dispatch(
       deleteTaskList(
         {
           listId: currentListId, 
           //引数で現在クリックしているリストid情報
-        }
-      )
-    );
-  }
+        })
+      );
+    }
+  };
 
   const addTaskClick = (currentListId) => {
     //引数で現在クリックしているタスクの親リストのlistIdを受け取る
@@ -183,19 +186,22 @@ function App() {
   const deleteTaskClick = (currentListId, currentTaskId, taskCompleted) =>  {
     //引数で現在クリックしているリストid情報とタスクid情報を受けとる
      if(taskCompleted === false)
-     //チェックボックスが完了のタスクのみ削除を実装する
-      {
-      dispatch(
-        deleteTask(
-          {
-            listId: currentListId, 
-            taskId: currentTaskId
-            //引数で現在クリックしているリストid情報とタスクid情報
-          }
-        )
-      );
-     }
-
+     {
+    //チェックボックスが完了のタスクのみ削除を実装する
+    const result = window.confirm("本当に削除しますか？");
+    if (result) {
+    //confirmメソッドで削除前のアラート表示
+        dispatch(
+          deleteTask(
+            {
+              listId: currentListId, 
+              taskId: currentTaskId
+              //引数で現在クリックしているリストid情報とタスクid情報
+            }
+          )
+        );
+      }
+    }
   }
 
   return (
@@ -278,7 +284,7 @@ function App() {
                           <h3> {task.text}</h3>
                         )}
                   </div>
-                  <FontAwesomeIcon className='taskDeleteButton' icon={faTrashCan} onClick= {() => deleteTaskClick(list.listId,task.id,task.completed)}>削除</FontAwesomeIcon>
+                 <FontAwesomeIcon className='taskDeleteButton' icon={faTrashCan} onClick= {() => deleteTaskClick(list.listId,task.id,task.completed)}>削除</FontAwesomeIcon>
                 </div>
               ))}
             </div>
