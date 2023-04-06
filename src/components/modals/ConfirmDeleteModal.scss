@@ -1,0 +1,22 @@
+.ConfirmDeleteModal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999; 
+
+}
+
+.modal{
+  margin: 20px;
+  padding: 50px;
+  background: #f1f1f1;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.22);
+}
+
+.modalButtons{
+  padding-top: 40px;
+  display: flex; 
+  justify-content: space-around; 
+}
+

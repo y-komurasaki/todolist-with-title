@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { faSquarePlus } from "@fortawesome/free-solid-svg-icons";
+import ConfirmDeleteModal from './components/modals/ConfirmDeleteModal';
 
 
 function App() {
@@ -22,6 +23,11 @@ function App() {
   //タスク編集時の新たに更新するtext情報
   const [editTaskId, setEditTaskId] = useState(null)
   //現在クリックしているタスクを編集フォームを展開させるためのid
+  const [deleteTaskShowModal, setDeleteTaskShowModal] = useState(false);
+  const [deleteListId, setDeleteListId] = useState(null)
+  const [deleteTaskId, setDeleteTaskId] = useState(null)
+  //削除モーダル開く開かないの状態管理、削除時に管理するidの状態
+
   const tasks = useSelector((state) => state.tasks);
   //sliceとの状態保持した情報やりとりさせるためメソッドを扱えるようにした変数
   const dispatch = useDispatch();
@@ -179,18 +185,29 @@ function App() {
       })
       //上記で受け取った値をdispatchに渡す
     )
-    console.log(taskCompleted)
-        
   }
 
-  const deleteTaskClick = (currentListId, currentTaskId, taskCompleted) =>  {
+  const openModal = (currentListId, currentTaskId) => {
     //引数で現在クリックしているリストid情報とタスクid情報を受けとる
-     if(taskCompleted === false)
-     {
-    //チェックボックスが完了のタスクのみ削除を実装する
-    const result = window.confirm("本当に削除しますか？");
-    if (result) {
-    //confirmメソッドで削除前のアラート表示
+    setDeleteListId(currentListId)
+    setDeleteTaskId(currentTaskId)
+    //それぞれのidをstateにセットする
+    setDeleteTaskShowModal(true); 
+    //状態をtrueにしてモーダルを表示
+  };
+
+  const closeModal = () => {
+    setDeleteTaskShowModal(false);
+  }
+
+  const deleteTaskClick = (currentListId, currentTaskId) =>  {
+    //引数で現在クリックしているリストid情報とタスクid情報を受けとる
+    openModal(currentListId, currentTaskId);
+   //コールバック関数でopenModalを呼び出し引数でidを渡す
+}
+    
+  const deleteConfirmation = (currentListId, currentTaskId,) => {
+    //モーダルの削除ボタンが押されたら処理が走る
         dispatch(
           deleteTask(
             {
@@ -198,14 +215,29 @@ function App() {
               taskId: currentTaskId
               //引数で現在クリックしているリストid情報とタスクid情報
             }
+            
           )
         );
+        closeModal();
+        //モーダルを閉じて処理を終える
       }
-    }
-  }
+    
+    
+  
 
   return (
+    
     <div className="App">
+
+      {deleteTaskShowModal && 
+        <ConfirmDeleteModal
+          showModal={deleteTaskShowModal}
+          closeModal={closeModal}
+          deleteConfirmation={deleteConfirmation}
+          listId={deleteListId}
+          taskId={deleteTaskId}
+      />}
+
       <div className='inputTitleContents'>
         <input 
           type="text"
@@ -284,15 +316,15 @@ function App() {
                           <h3> {task.text}</h3>
                         )}
                   </div>
-                 <FontAwesomeIcon className='taskDeleteButton' icon={faTrashCan} onClick= {() => deleteTaskClick(list.listId,task.id,task.completed)}>削除</FontAwesomeIcon>
+                   <FontAwesomeIcon className='taskDeleteButton' icon={faTrashCan} onClick= {() => deleteTaskClick(list.listId,task.id)}>削除</FontAwesomeIcon>
                 </div>
               ))}
             </div>
           </div>
           ))}
         </div>
-      </div>
+      </div>     
     );
-}
+  }
 
 export default App;
