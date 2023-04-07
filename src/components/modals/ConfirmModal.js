@@ -23,3 +23,19 @@ export const ConfirmDeleteModal = ({ showModal, closeModal, deleteConfirmation, 
     )
   );
 };
+
+export const RegisteredAlertModal = ({showModal,closeModal}) => {
+  return (
+    showModal && (
+      <div className="modal">
+        <div className="modalContent">
+          <h2>既に登録されています</h2>
+          <div className="modalButtons">
+            <button className="cancelButton" onClick={closeModal}>閉じる</button>
+            {/* モーダルを閉じで終わる */}
+          </div>
+        </div>
+      </div>
+    )
+  );
+}

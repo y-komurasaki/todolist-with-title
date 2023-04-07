@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { faSquarePlus } from "@fortawesome/free-solid-svg-icons";
-import { ConfirmDeleteModal } from './components/modals/ConfirmModal';
+import { ConfirmDeleteModal, RegisteredAlertModal } from './components/modals/ConfirmModal';
 
 
 function App() {
@@ -23,20 +23,41 @@ function App() {
   //タスク編集時の新たに更新するtext情報
   const [editTaskId, setEditTaskId] = useState(null)
   //現在クリックしているタスクを編集フォームを展開させるためのid
-  const [deleteTaskShowModal, setDeleteTaskShowModal] = useState(false);
+  const [deleteShowModal, setDeleteShowModal] = useState(false);
+  const [addShowModal, setAddShowModal] = useState(false);
   const [deleteListId, setDeleteListId] = useState(null)
   const [deleteTaskId, setDeleteTaskId] = useState(null)
-  //削除モーダル開く開かないの状態管理、削除時に管理するidの状態
+  //モーダル開く開かないの状態管理、削除時に管理するidの状態
 
   const tasks = useSelector((state) => state.tasks);
   //sliceとの状態保持した情報やりとりさせるためメソッドを扱えるようにした変数
   const dispatch = useDispatch();
   //下記dispatchで全てsliceのaction.payloadに渡すためのメソッドを扱えるようにした変数
 
+  const openAddModal = () => {
+    setAddShowModal(true); 
+    //状態をtrueにしてモーダルを表示
+  };
+
+  const closeAddModal = () =>{
+    setAddShowModal(false); 
+    //状態をfalseにしてモーダルを閉じる
+  }
+
   const addTaskListClick = () => {
     if (newListTitleText === "")
     return
     //textの中身が空白なら登録せず返却
+    const isExistingList = tasks.taskLists.some(
+      (list) => list.title === newListTitleText
+    );
+    //some関数で現在のタイトルと入力したtextが同じならtrueを返す
+    if (isExistingList) {
+      openAddModal();
+      return
+      //isExistingListがtrueならモーダルを開き登録されない
+    }
+
     const listId = uuidv4()
     //リスト生成時にuniqueな重複しないidをuuidで設定
     //初期値で引っ張ると同じidが重複してしまうためこのタイミング
@@ -110,6 +131,17 @@ function App() {
     //引数で現在クリックしているタスクの親リストのlistIdを受け取る
     if (newTaskText[currentListId] === "")
     return
+
+  const isExistingTask = tasks.taskLists.some((list) =>
+      list.contents.some((task) => task.text === newTaskText[currentListId])
+      );
+    //some関数でListの中のTaskを確認し現在のtask.textと入力したtextが同じならtrueを返す
+    if (isExistingTask) {
+      openAddModal();
+    return;
+    //isExistingListがtrueならモーダルを開き登録されない
+  }
+
     const taskId = uuidv4();
     //タスク生成時にuniqueな重複しないidをuuidで設定
     //初期値で引っ張ると同じidが重複してしまうためこのタイミング
@@ -131,6 +163,7 @@ function App() {
           [currentListId]:""
         });  
         //入力フォームを空にするための処理
+        closeAddModal()
   };
 
   const editTaskClick = (currentTaskId, currentTaskText) => {
@@ -194,12 +227,12 @@ function App() {
     setDeleteListId(currentListId)
     setDeleteTaskId(currentTaskId)
     //それぞれのidをstateにセットする
-    setDeleteTaskShowModal(true); 
+    setDeleteShowModal(true); 
     //状態をtrueにしてモーダルを表示
   };
 
   const closeModal = () => {
-    setDeleteTaskShowModal(false);
+    setDeleteShowModal(false);
   }
 
   const deleteTaskClick = (currentListId, currentTaskId) =>  {
@@ -217,7 +250,6 @@ function App() {
               taskId: currentTaskId
               //引数で現在クリックしているリストid情報とタスクid情報
             }
-            
           )
         );
         closeModal();
@@ -231,14 +263,19 @@ function App() {
     
     <div className="App">
 
-      {deleteTaskShowModal && 
+      {deleteShowModal && 
         <ConfirmDeleteModal
-          showModal={deleteTaskShowModal}
+          showModal={deleteShowModal}
           closeModal={closeModal}
           deleteConfirmation={deleteConfirmation}
           deleteListConfirmation={deleteListConfirmation}
           listId={deleteListId}
           taskId={deleteTaskId}
+      />}
+      {addShowModal && 
+        <RegisteredAlertModal
+        showModal={addShowModal}
+        closeModal={closeAddModal}
       />}
 
       <div className='inputTitleContents'>
