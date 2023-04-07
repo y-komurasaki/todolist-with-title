@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { faSquarePlus } from "@fortawesome/free-solid-svg-icons";
-import ConfirmDeleteModal from './components/modals/ConfirmDeleteModal';
+import { ConfirmDeleteModal } from './components/modals/ConfirmModal';
 
 
 function App() {
@@ -91,9 +91,11 @@ function App() {
 
   const deleteTaskListClick = (currentListId) =>{
     //現在クリックしているタスクidを情報を受け取る
-    const result = window.confirm("本当に削除しますか？");
-    if (result) {
-    //confirmメソッドで削除前のアラート表示
+    openModal(currentListId);
+  }
+
+  const deleteListConfirmation = (currentListId) => {
+
     dispatch(
       deleteTaskList(
         {
@@ -101,7 +103,7 @@ function App() {
           //引数で現在クリックしているリストid情報
         })
       );
-    }
+      closeModal();
   };
 
   const addTaskClick = (currentListId) => {
@@ -234,6 +236,7 @@ function App() {
           showModal={deleteTaskShowModal}
           closeModal={closeModal}
           deleteConfirmation={deleteConfirmation}
+          deleteListConfirmation={deleteListConfirmation}
           listId={deleteListId}
           taskId={deleteTaskId}
       />}
