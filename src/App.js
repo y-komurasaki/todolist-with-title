@@ -45,7 +45,9 @@ function App() {
   }
 
   const addTaskListClick = () => {
-    if (newListTitleText === "")
+
+    if (newListTitleText === "" || newListTitleText.match(/[ｦ-ﾟァ-ン０-９]+/))
+    //(/^[ｦ-ﾟ `０-９` ]*$/)でも可能
     return
     //textの中身が空白なら登録せず返却
     const isExistingList = tasks.taskLists.some(
@@ -88,7 +90,12 @@ function App() {
   }
   
   const editTitleDataSubmit = (e, currentListId) => {
+
     e.preventDefault();
+
+    if (editListTitleText.match(/[ｦ-ﾟァ-ン０-９]+/)) {
+      return;
+    }
     dispatch(
       editTaskList(  
           {
@@ -129,7 +136,7 @@ function App() {
 
   const addTaskClick = (currentListId) => {
     //引数で現在クリックしているタスクの親リストのlistIdを受け取る
-    if (newTaskText[currentListId] === "")
+    if (newTaskText[currentListId] === "" || newTaskText[currentListId].match(/[ｦ-ﾟァ-ン０-９]+/))
     return
 
   const isExistingTask = tasks.taskLists.some((list) =>
@@ -183,6 +190,8 @@ function App() {
 
   const editDataSubmit = (e,currentListId, currentTaskId) => {
     e.preventDefault();
+    if (editInputTaskText.match(/[ｦ-ﾟァ-ン０-９]+/)) 
+      return;
     dispatch(
       editTask(  
           {
