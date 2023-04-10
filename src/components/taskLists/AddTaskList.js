@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSquarePlus } from "@fortawesome/free-solid-svg-icons";
 import { addTaskList } from '../../features/Tasks';
 
-function AddTaskList({openAddModal}) {
+const AddTaskList = ({openAddModal}) => {
   const [newListTitleText, setNewListTitleText] = useState("");
   //リストのタイトルのテキスト情報
   const dispatch = useDispatch();
