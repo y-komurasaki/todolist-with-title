@@ -47,9 +47,8 @@ function App() {
   const addTaskListClick = () => {
 
     if (newListTitleText === "" || newListTitleText.match(/[ｦ-ﾟァ-ン０-９]+/))
-    //(/^[ｦ-ﾟ `０-９` ]*$/)でも可能
     return
-    //textの中身が空白なら登録せず返却
+    //textの中身が空白なら登録せず返却、matchメソッドで半角カナ全角英数字登録せず返却
     const isExistingList = tasks.taskLists.some(
       (list) => list.title === newListTitleText
     );
@@ -96,6 +95,7 @@ function App() {
     if (editListTitleText.match(/[ｦ-ﾟァ-ン０-９]+/)) {
       return;
     }
+    //matchメソッドで半角カナ全角英数字登録せず返却
     dispatch(
       editTaskList(  
           {
@@ -138,6 +138,7 @@ function App() {
     //引数で現在クリックしているタスクの親リストのlistIdを受け取る
     if (newTaskText[currentListId] === "" || newTaskText[currentListId].match(/[ｦ-ﾟァ-ン０-９]+/))
     return
+     //textの中身が空白なら登録せず返却、matchメソッドで半角カナ全角英数字登録せず返却
 
   const isExistingTask = tasks.taskLists.some((list) =>
       list.contents.some((task) => task.text === newTaskText[currentListId])
@@ -192,6 +193,7 @@ function App() {
     e.preventDefault();
     if (editInputTaskText.match(/[ｦ-ﾟァ-ン０-９]+/)) 
       return;
+    //matchメソッドで半角カナ全角英数字登録せず返却
     dispatch(
       editTask(  
           {
