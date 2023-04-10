@@ -1,18 +1,17 @@
 import './App.scss';
 import { useSelector, useDispatch } from 'react-redux';
-import { addTaskList,editTaskList,deleteTaskList,addTask,editTask,deleteTask,checkedTask } from './features/Tasks';
+import { editTaskList,deleteTaskList,addTask,editTask,deleteTask,checkedTask } from './features/Tasks';
 import { useState } from 'react';
 import { v4 as uuidv4 } from "uuid";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { faSquarePlus } from "@fortawesome/free-solid-svg-icons";
 import { ConfirmDeleteModal, RegisteredAlertModal } from './components/modals/ConfirmModal';
+import AddTaskList from './components/taskLists/AddTaskList';
 
 
 function App() {
 
-  const [newListTitleText, setNewListTitleText] = useState("");
-  //リストのタイトルのテキスト情報
   const [editListTitleText, setEditListTitleText] = useState("");
   //タスク編集時の新たに更新するtext情報
   const [editListId, setEditListId] = useState(null)
@@ -44,38 +43,6 @@ function App() {
     //状態をfalseにしてモーダルを閉じる
   }
 
-  const addTaskListClick = () => {
-
-    if (newListTitleText === "" || newListTitleText.match(/[ｦ-ﾟァ-ン０-９]+/))
-    return
-    //textの中身が空白なら登録せず返却、matchメソッドで半角カナ全角英数字登録せず返却
-    const isExistingList = tasks.taskLists.some(
-      (list) => list.title === newListTitleText
-    );
-    //some関数で現在のタイトルと入力したtextが同じならtrueを返す
-    if (isExistingList) {
-      openAddModal();
-      return
-      //isExistingListがtrueならモーダルを開き登録されない
-    }
-
-    const listId = uuidv4()
-    //リスト生成時にuniqueな重複しないidをuuidで設定
-    //初期値で引っ張ると同じidが重複してしまうためこのタイミング
-    dispatch(
-      
-    addTaskList(   
-        {
-          listId:listId,
-          //生成時にsetしたuniqueなIdの状態を持ったlistId
-          newTitleText:newListTitleText,
-          //タイトル入力フォームで入力したtext情報
-        }
-      )
-    );
-    setNewListTitleText("");
-    //入力フォームを空にするための処理
-  }
 
   const editTitleClick = (currentListId,currentTitleText) => {
     setEditListId(currentListId);
@@ -289,18 +256,9 @@ function App() {
         closeModal={closeAddModal}
       />}
 
-      <div className='inputTitleContents'>
-        <input 
-          type="text"
-          placeholder='タイトルを入力'
-          onChange={(e) => setNewListTitleText(e.target.value)}
-          //入力したtextの状態をsetNewListTitleTexで保時
-          value={newListTitleText}
-          className='inputTitle'
-        />
-        <FontAwesomeIcon icon={faSquarePlus}  className='listAddButton' onClick={() => addTaskListClick()}></FontAwesomeIcon>
-        
-      </div>
+      <AddTaskList
+        openAddModal={openAddModal}
+      />
 
       <div className="taskLists">
       {tasks.taskLists.map((list) => (
