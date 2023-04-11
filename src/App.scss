@@ -1,75 +1,79 @@
 .App {
   text-align: center;
   position: relative;
-  
+
   .taskLists {
-    display: flex;   
+    display: flex;
     justify-content: center;
-    flex-wrap:wrap
-    
+    flex-wrap: wrap;
   }
-  .listAddButton{
+  .taskList {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .listAddButton {
     font-size: 30px;
     cursor: pointer;
   }
-  .listAddButton:hover{
-     color: green;
+  .listAddButton:hover {
+    color: green;
   }
 
-  .listDeleteButton{
+  .listDeleteButton {
     font-size: 20px;
     cursor: pointer;
-    padding-top:0.5em
+    padding-top: 1em;
   }
-  .listDeleteButton:hover{
+  .listDeleteButton:hover {
     color: red;
   }
 
-  .inputTitleContents{
-    display: flex; 
+  .inputTitleContents {
+    display: flex;
     justify-content: center;
     margin: 20px;
   }
-  .inputTitle{
+  .inputTitle {
     margin-right: 5px;
   }
-  .listTitles{
-    display: flex; 
-    justify-content: center; 
+  .listTitles {
+    display: flex;
+    justify-content: center;
     font-size: 1.8em;
     padding: 10px;
     margin-bottom: 10px;
     text-align: center;
     font-weight: bold;
     letter-spacing: 0.05em;
-
   }
   .listTitles p {
     margin-right: 10px;
   }
 
-  .addTodoContents{
-    display: flex; 
-    justify-content: space-between; 
+  .addTodoContents {
+    display: flex;
+    justify-content: space-between;
     margin: 20px;
   }
-  .inputTodo{
+  .inputTodo {
     margin-right: 5px;
   }
 
-  .addTodoButton{
+  .addTodoButton {
     font-size: 20px;
     cursor: pointer;
   }
-  .addTodoButton:hover{
-     color: green;
+  .addTodoButton:hover {
+    color: green;
   }
 
-  .taskDeleteButton{
+  .taskDeleteButton {
     font-size: 20px;
     cursor: pointer;
   }
-  .taskDeleteButton:hover{
+  .taskDeleteButton:hover {
     color: red;
   }
   .taskList {
@@ -80,15 +84,11 @@
   }
 
   .task {
-    display: flex; 
-    justify-content: space-between; 
+    display: flex;
+    justify-content: space-between;
     margin: 20px;
     padding: 10px;
     background: #f1f1f1fc;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.22);
   }
-  
-
-
 }
-
