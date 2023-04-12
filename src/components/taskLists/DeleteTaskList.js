@@ -12,7 +12,7 @@ const DeleteTaskList = ({ list, openModal }) => {
       className="listDeleteButton"
       icon={faTrashCan}
       onClick={() => deleteTaskListClick(list.listId)}
-    ></FontAwesomeIcon>
+    />
   );
 };
 

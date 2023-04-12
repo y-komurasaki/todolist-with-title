@@ -71,7 +71,7 @@ const AddTask = ({ list, listId, openAddModal, closeAddModal }) => {
         className="addTodoButton"
         icon={faSquarePlus}
         onClick={() => addTaskClick(list.listId)}
-      ></FontAwesomeIcon>
+      />
     </div>
   );
 };
