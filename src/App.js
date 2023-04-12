@@ -2,7 +2,6 @@ import "./App.scss";
 import { useSelector, useDispatch } from "react-redux";
 import {
   deleteTaskList,
-  addTask,
   editTask,
   deleteTask,
   checkedTask,
@@ -21,8 +20,7 @@ import TaskLists from "./components/taskLists/TaskLists";
 
 function App() {
   //現在クリックしているリストタイトルを編集フォームを展開させるためのid
-  const [newTaskText, setNewTaskText] = useState({});
-  //新しいタスクを生成したときのtext情報
+
   const [editInputTaskText, setEditInputTaskText] = useState();
   //タスク編集時の新たに更新するtext情報
   const [editTaskId, setEditTaskId] = useState(null);
@@ -48,51 +46,6 @@ function App() {
     //状態をfalseにしてモーダルを閉じる
   };
 
-  // const editTitleClick = (currentListId,currentTitleText) => {
-  //   setEditListId(currentListId);
-  //   //引数で現在クリックしているリストid情報とタスクid情報を受け取り既存のidと一致させフォームを展開して役割を終える。
-  //   setEditListTitleText(currentTitleText)
-  //   //現在のタイトルtext情報の状態を持たせる
-  // }
-  // const editTitleTextChange = (e) => {
-  //     setEditListTitleText(e.target.value);
-  //    //入力した文字がInputTitleTextにセットされる
-  // }
-
-  // const editTitleDataSubmit = (e, currentListId) => {
-
-  //   e.preventDefault();
-
-  //   if (editListTitleText.match(/[ｦ-ﾟァ-ン０-９]+/)) {
-  //     return;
-  //   }
-  //   //matchメソッドで半角カナ全角英数字登録せず返却
-  //   dispatch(
-  //     editTaskList(
-  //         {
-  //         listId:currentListId,
-  //         //現在フォームが展開しているタスクのid情報
-  //         editListTitleText: editListTitleText,
-  //         //編集フォーム入力したtext情報
-  //         }
-  //       )
-  //     );
-  //     if (editListTitleText === "")
-  //     return dispatch(
-  //       deleteTaskList({
-  //         listId:currentListId,
-  //       }));
-  //       //編集中テキストが空の場合はdeleteTaskの処理を実行
-  //       setEditInputTaskText("");
-  //       //編集テキストフォームを空にして初期化する
-  //       setEditListId(null)
-  // };
-
-  // const deleteTaskListClick = (currentListId) =>{
-  //   //現在クリックしているタスクidを情報を受け取る
-  //   openModal(currentListId);
-  // }
-
   const deleteListConfirmation = (currentListId) => {
     dispatch(
       deleteTaskList({
@@ -101,46 +54,6 @@ function App() {
       })
     );
     closeModal();
-  };
-
-  const addTaskClick = (currentListId) => {
-    //引数で現在クリックしているタスクの親リストのlistIdを受け取る
-    if (
-      newTaskText[currentListId] === "" ||
-      newTaskText[currentListId].match(/[ｦ-ﾟァ-ン０-９]+/)
-    )
-      return;
-    //textの中身が空白なら登録せず返却、matchメソッドで半角カナ全角英数字登録せず返却
-
-    const isExistingTask = tasks.taskLists.some((list) =>
-      list.contents.some((task) => task.text === newTaskText[currentListId])
-    );
-    //some関数でListの中のTaskを確認し現在のtask.textと入力したtextが同じならtrueを返す
-    if (isExistingTask) {
-      openAddModal();
-      return;
-      //isExistingListがtrueならモーダルを開き登録されない
-    }
-
-    const taskId = uuidv4();
-    //タスク生成時にuniqueな重複しないidをuuidで設定
-    //初期値で引っ張ると同じidが重複してしまうためこのタイミング
-    dispatch(
-      addTask({
-        listId: currentListId,
-        //引数で受け取った追加しようとしているタスクのlistId
-        taskId: taskId,
-        //生成時にsetしたuniqueなIdの状態を持ったtaskId
-        newTaskText: newTaskText[currentListId],
-        //Todoフォームで入力したtext情報
-      })
-    );
-    setNewTaskText({
-      ...newTaskText,
-      [currentListId]: "",
-    });
-    //入力フォームを空にするための処理
-    closeAddModal();
   };
 
   const editTaskClick = (currentTaskId, currentTaskText) => {
@@ -248,29 +161,11 @@ function App() {
       )}
 
       <AddTaskList openAddModal={openAddModal} />
-      <TaskLists openAddModal={openAddModal} openModal={openModal} />
-
-      {/* <div className="taskLists">
-      {tasks.taskLists.map((list) => (
-        <div key={list.listId} className="taskList">
-          <div 
-            onClick= {() => editTitleClick(list.listId,list.title)}
-            className="listTitles"
-          >
-          { 
-          (editListId === list.listId) ? (
-          //編集したいidとマップのidが一致してるならフォームを展開する    
-          <form onSubmit={(e) => editTitleDataSubmit(e, list.listId)}>
-            <input 
-              type='text' 
-              onChange={editTitleTextChange} 
-              defaultValue={list.title}
-              key={list.listId}
-            />
-          </form>
-            ) : (<p> {list.title}</p> )} */}
-      {/* <FontAwesomeIcon className='listDeleteButton' icon={faTrashCan} onClick= {() => deleteTaskListClick(list.listId)}></FontAwesomeIcon>
-        </div> */}
+      <TaskLists
+        openAddModal={openAddModal}
+        openModal={openModal}
+        closeAddModal={closeAddModal}
+      />
 
       {/* <div className="addTodoContents">
         <input
@@ -291,6 +186,8 @@ function App() {
           onClick={() => addTaskClick(list.listId)}
         ></FontAwesomeIcon>
       </div>
+
+      
       <div className="displayTask">
         {list.contents.map((task) => (
           <div key={task.id} className="task">
