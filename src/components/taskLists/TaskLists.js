@@ -1,5 +1,6 @@
 import { useSelector } from "react-redux";
 import AddTask from "../tasks/AddTask";
+import DisplayTask from "../tasks/DisplayTask";
 import DeleteTaskList from "./DeleteTaskList";
 import EditTaskList from "./EditTaskList";
 
@@ -18,6 +19,7 @@ const TaskLists = ({ openAddModal, openModal, closeAddModal }) => {
             openAddModal={openAddModal}
             closeAddModal={closeAddModal}
           />
+          <DisplayTask list={list} openModal={openModal} />
         </div>
       ))}
     </div>
