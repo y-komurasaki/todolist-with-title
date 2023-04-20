@@ -25,7 +25,7 @@ const EditTask = ({ list, task, openAddModal }) => {
 
   const editDataSubmit = (e, currentListId, currentTaskId) => {
     e.preventDefault();
-    if (editInputTaskText.match(/[ｦ-ﾟァ-ン０-９]+/)) return;
+    if (editInputTaskText.match(/[ｦ-ﾟ０-９]+/)) return;
     //matchメソッドで半角カナ全角英数字登録せず返却
 
     const isExistingTask = tasks.taskLists.some((taskList) =>

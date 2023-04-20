@@ -14,7 +14,7 @@ const AddTask = ({ list, openAddModal, closeAddModal }) => {
     //引数で現在クリックしているタスクの親リストのlistIdを受け取る
     if (
       newTaskText[list.listId] === "" ||
-      newTaskText[list.listId].match(/[ｦ-ﾟァ-ン０-９]+/)
+      newTaskText[list.listId].match(/[ｦ-ﾟ０-９]+/)
     )
       return;
     //textの中身が空白なら登録せず返却、matchメソッドで半角カナ全角英数字登録せず返却

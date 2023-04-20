@@ -22,7 +22,7 @@ const EditTaskList = ({ list, openAddModal }) => {
   const editTitleDataSubmit = (e) => {
     e.preventDefault();
 
-    if (editListTitleText.match(/[ｦ-ﾟァ-ン０-９]+/)) {
+    if (editListTitleText.match(/[ｦ-ﾟ０-９]+/)) {
       return;
     }
 

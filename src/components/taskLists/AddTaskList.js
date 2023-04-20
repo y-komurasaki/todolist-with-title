@@ -13,7 +13,7 @@ const AddTaskList = ({ openAddModal }) => {
   const tasks = useSelector((state) => state.tasks);
 
   const addTaskListClick = () => {
-    if (newListTitleText === "" || newListTitleText.match(/[ｦ-ﾟァ-ン０-９]+/))
+    if (newListTitleText === "" || newListTitleText.match(/[ｦ-ﾟ０-９]+/))
       return;
     //textの中身が空白なら登録せず返却、matchメソッドで半角カナ全角英数字登録せず返却
     const isExistingList = tasks.taskLists.some(
