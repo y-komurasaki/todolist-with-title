@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { editTaskList, deleteTaskList } from "../../features/Tasks";
 
 const EditTaskList = ({ list, openAddModal }) => {
@@ -7,7 +7,7 @@ const EditTaskList = ({ list, openAddModal }) => {
   //タスク編集時の新たに更新するtext情報
   const [editListId, setEditListId] = useState(null);
   const dispatch = useDispatch();
-
+  const tasks = useSelector((state) => state.tasks);
   const editTitleClick = () => {
     setEditListId(list.listId);
     //引数で現在クリックしているリストid情報とタスクid情報を受け取り既存のidと一致させフォームを展開して役割を終える。
@@ -26,8 +26,10 @@ const EditTaskList = ({ list, openAddModal }) => {
       return;
     }
 
-    const isExistingList =
-      list.title === editListTitleText || list.title === "";
+    const isExistingList = tasks.taskLists.some(
+      (list) => list.title === editListTitleText
+    );
+
     //some関数で現在のタイトルと入力したtextが同じならtrueを返す
     if (isExistingList) {
       openAddModal();

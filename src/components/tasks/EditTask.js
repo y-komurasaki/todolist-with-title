@@ -1,13 +1,14 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { editTask, deleteTask } from "../../features/Tasks";
 import { useState } from "react";
 
-const EditTask = ({ list, task }) => {
-  const dispatch = useDispatch();
+const EditTask = ({ list, task, openAddModal }) => {
   const [editInputTaskText, setEditInputTaskText] = useState();
   //タスク編集時の新たに更新するtext情報
   const [editTaskId, setEditTaskId] = useState(null);
   //現在クリックしているタスクを編集フォームを展開させるためのid
+  const dispatch = useDispatch();
+  const tasks = useSelector((state) => state.tasks);
 
   const editTaskClick = (currentTaskId, currentTaskText) => {
     setEditTaskId(currentTaskId);
@@ -26,6 +27,16 @@ const EditTask = ({ list, task }) => {
     e.preventDefault();
     if (editInputTaskText.match(/[ｦ-ﾟァ-ン０-９]+/)) return;
     //matchメソッドで半角カナ全角英数字登録せず返却
+
+    const isExistingTask = tasks.taskLists.some((taskList) =>
+      taskList.contents.some((task) => task.text === editInputTaskText)
+    );
+
+    if (isExistingTask) {
+      openAddModal();
+      return;
+    }
+
     dispatch(
       editTask({
         listId: currentListId,

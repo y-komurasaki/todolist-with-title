@@ -22,6 +22,7 @@ const AddTask = ({ list, openAddModal, closeAddModal }) => {
     const isExistingTask = tasks.taskLists.some((list) =>
       list.contents.some((task) => task.text === newTaskText[list.listId])
     );
+
     //some関数でListの中のTaskを確認し現在のtask.textと入力したtextが同じならtrueを返す
     if (isExistingTask) {
       openAddModal();
