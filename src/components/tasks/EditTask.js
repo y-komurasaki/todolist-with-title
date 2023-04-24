@@ -1,8 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
-import { editTask, deleteTask } from "../../features/Tasks";
+import { editTask } from "../../features/Tasks";
 import { useState } from "react";
 
-const EditTask = ({ list, task, openAddModal }) => {
+const EditTask = ({ list, task, openAddModal, openModal }) => {
   const [editInputTaskText, setEditInputTaskText] = useState();
   //タスク編集時の新たに更新するtext情報
   const [editTaskId, setEditTaskId] = useState(null);
@@ -47,13 +47,11 @@ const EditTask = ({ list, task, openAddModal }) => {
         //編集フォーム入力したtext情報
       })
     );
-    if (editInputTaskText === "")
-      return dispatch(
-        deleteTask({
-          listId: currentListId,
-          taskId: currentTaskId,
-        })
-      );
+    if (editInputTaskText === "") {
+      openModal(currentListId, currentTaskId, editInputTaskText);
+      return;
+    }
+
     //編集中テキストが空の場合はdeleteTaskの処理を実行
     setEditInputTaskText("");
     //編集テキストフォームを空にして初期化する

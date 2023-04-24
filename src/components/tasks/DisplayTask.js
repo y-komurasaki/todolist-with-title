@@ -14,7 +14,12 @@ const DisplayTask = ({ list, openModal, openAddModal, closeAddModal }) => {
       {list.contents.map((task) => (
         <div key={task.id} className="task">
           <CheckedTask list={list} task={task} />
-          <EditTask list={list} task={task} openAddModal={openAddModal} />
+          <EditTask
+            list={list}
+            task={task}
+            openAddModal={openAddModal}
+            openModal={openModal}
+          />
           <DeleteTask list={list} task={task} openModal={openModal} />
         </div>
       ))}

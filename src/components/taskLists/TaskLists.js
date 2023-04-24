@@ -10,7 +10,11 @@ const TaskLists = ({ openAddModal, openModal, closeAddModal }) => {
       {tasks.taskLists.map((list) => (
         <div key={list.listId} className="taskList">
           <div className="taskListTitles">
-            <EditTaskList list={list} openAddModal={openAddModal} />
+            <EditTaskList
+              list={list}
+              openAddModal={openAddModal}
+              openModal={openModal}
+            />
             <DeleteTaskList list={list} openModal={openModal} />
           </div>
           <DisplayTask

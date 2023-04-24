@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { editTaskList, deleteTaskList } from "../../features/Tasks";
+import { editTaskList } from "../../features/Tasks";
 
-const EditTaskList = ({ list, openAddModal }) => {
+const EditTaskList = ({ list, openAddModal, openModal }) => {
   const [editListTitleText, setEditListTitleText] = useState("");
   //タスク編集時の新たに更新するtext情報
   const [editListId, setEditListId] = useState(null);
@@ -25,17 +25,15 @@ const EditTaskList = ({ list, openAddModal }) => {
     if (editListTitleText.match(/[ｦ-ﾟ０-９]+/)) {
       return;
     }
-
+    //matchメソッドで半角カナ全角英数字登録せず返却
     const isExistingList = tasks.taskLists.some(
       (list) => list.title === editListTitleText
     );
-
     //some関数で現在のタイトルと入力したtextが同じならtrueを返す
     if (isExistingList) {
       openAddModal();
       return;
       //isExistingListがtrueならモーダルを開き登録されない
-      //matchメソッドで半角カナ全角英数字登録せず返却
     }
 
     dispatch(
@@ -48,7 +46,7 @@ const EditTaskList = ({ list, openAddModal }) => {
     );
 
     if (editListTitleText === "") {
-      dispatch(deleteTaskList({ listId: list.listId }));
+      openModal(list.listId, editListTitleText);
     }
     //編集中テキストが空の場合はdeleteTaskの処理を実行
     setEditListTitleText("");
