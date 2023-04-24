@@ -4,6 +4,7 @@ import { deleteTaskList, deleteTask } from "./features/Tasks";
 import { useState } from "react";
 import {
   ConfirmDeleteModal,
+  ConfirmEditingDeleteModal,
   RegisteredAlertModal,
 } from "./components/modals/ConfirmModal";
 import AddTaskList from "./components/taskLists/AddTaskList";
@@ -11,6 +12,7 @@ import TaskLists from "./components/taskLists/TaskLists";
 
 function App() {
   const [deleteShowModal, setDeleteShowModal] = useState(false);
+  const [editingDeleteShowModal, setEditingDeleteShowModal] = useState(false);
   const [addShowModal, setAddShowModal] = useState(false);
   const [deleteListId, setDeleteListId] = useState(null);
   const [deleteTaskId, setDeleteTaskId] = useState(null);
@@ -39,7 +41,7 @@ function App() {
     closeModal();
   };
 
-  const openModal = (currentListId, currentTaskId) => {
+  const openDeleteModal = (currentListId, currentTaskId) => {
     //引数で現在クリックしているリストid情報とタスクid情報を受けとる
     setDeleteListId(currentListId);
     setDeleteTaskId(currentTaskId);
@@ -48,11 +50,33 @@ function App() {
     //状態をtrueにしてモーダルを表示
   };
 
+  const openEditingDeleteModal = (currentListId, currentTaskId) => {
+    //引数で現在クリックしているリストid情報とタスクid情報を受けとる
+    setDeleteListId(currentListId);
+    setDeleteTaskId(currentTaskId);
+    //それぞれのidをstateにセットする
+    setEditingDeleteShowModal(true);
+    //状態をtrueにしてモーダルを表示
+  };
+
   const closeModal = () => {
     setDeleteShowModal(false);
+    setEditingDeleteShowModal(false);
   };
 
   const deleteConfirmation = (currentListId, currentTaskId) => {
+    //モーダルの削除ボタンが押されたら処理が走る
+    dispatch(
+      deleteTask({
+        listId: currentListId,
+        taskId: currentTaskId,
+        //引数で現在クリックしているリストid情報とタスクid情報
+      })
+    );
+    closeModal();
+    //モーダルを閉じて処理を終える
+  };
+  const EditingDeleteConfirmation = (currentListId, currentTaskId) => {
     //モーダルの削除ボタンが押されたら処理が走る
     dispatch(
       deleteTask({
@@ -69,7 +93,17 @@ function App() {
     <div className="App">
       {deleteShowModal && (
         <ConfirmDeleteModal
-          showModal={deleteShowModal}
+          deleteShowModal={deleteShowModal}
+          closeModal={closeModal}
+          deleteConfirmation={deleteConfirmation}
+          deleteListConfirmation={deleteListConfirmation}
+          listId={deleteListId}
+          taskId={deleteTaskId}
+        />
+      )}
+      {editingDeleteShowModal && (
+        <ConfirmEditingDeleteModal
+          editingDeleteShowModal={editingDeleteShowModal}
           closeModal={closeModal}
           deleteConfirmation={deleteConfirmation}
           deleteListConfirmation={deleteListConfirmation}
@@ -87,7 +121,8 @@ function App() {
       <AddTaskList openAddModal={openAddModal} />
       <TaskLists
         openAddModal={openAddModal}
-        openModal={openModal}
+        openDeleteModal={openDeleteModal}
+        openEditingDeleteModal={openEditingDeleteModal}
         closeAddModal={closeAddModal}
       />
     </div>

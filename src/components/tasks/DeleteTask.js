@@ -1,9 +1,9 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
-const DeleteTask = ({ list, task, openModal }) => {
+const DeleteTask = ({ list, task, openDeleteModal }) => {
   const deleteTaskClick = (currentListId, currentTaskId) => {
     //引数で現在クリックしているリストid情報とタスクid情報を受けとる
-    openModal(currentListId, currentTaskId);
+    openDeleteModal(currentListId, currentTaskId);
     //コールバック関数でopenModalを呼び出し引数でidを渡す
   };
 

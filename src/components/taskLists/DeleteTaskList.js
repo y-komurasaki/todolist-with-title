@@ -1,10 +1,10 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 
-const DeleteTaskList = ({ list, openModal }) => {
+const DeleteTaskList = ({ list, openDeleteModal }) => {
   const deleteTaskListClick = () => {
     //現在クリックしているタスクidを情報を受け取る
-    openModal(list.listId);
+    openDeleteModal(list.listId);
   };
 
   return (

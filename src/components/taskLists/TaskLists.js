@@ -3,7 +3,12 @@ import DisplayTask from "../tasks/DisplayTask";
 import DeleteTaskList from "./DeleteTaskList";
 import EditTaskList from "./EditTaskList";
 
-const TaskLists = ({ openAddModal, openModal, closeAddModal }) => {
+const TaskLists = ({
+  openAddModal,
+  openDeleteModal,
+  openEditingDeleteModal,
+  closeAddModal,
+}) => {
   const tasks = useSelector((state) => state.tasks);
   return (
     <div className="taskLists">
@@ -13,15 +18,17 @@ const TaskLists = ({ openAddModal, openModal, closeAddModal }) => {
             <EditTaskList
               list={list}
               openAddModal={openAddModal}
-              openModal={openModal}
+              openDeleteModal={openDeleteModal}
+              openEditingDeleteModal={openEditingDeleteModal}
             />
-            <DeleteTaskList list={list} openModal={openModal} />
+            <DeleteTaskList list={list} openDeleteModal={openDeleteModal} />
           </div>
           <DisplayTask
             list={list}
-            openModal={openModal}
+            openDeleteModal={openDeleteModal}
             openAddModal={openAddModal}
             closeAddModal={closeAddModal}
+            openEditingDeleteModal={openEditingDeleteModal}
           />
         </div>
       ))}

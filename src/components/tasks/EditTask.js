@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { editTask } from "../../features/Tasks";
 import { useState } from "react";
 
-const EditTask = ({ list, task, openAddModal, openModal }) => {
+const EditTask = ({ list, task, openAddModal, openEditingDeleteModal }) => {
   const [editInputTaskText, setEditInputTaskText] = useState();
   //タスク編集時の新たに更新するtext情報
   const [editTaskId, setEditTaskId] = useState(null);
@@ -48,7 +48,8 @@ const EditTask = ({ list, task, openAddModal, openModal }) => {
       })
     );
     if (editInputTaskText === "") {
-      openModal(currentListId, currentTaskId, editInputTaskText);
+      openEditingDeleteModal(currentListId, currentTaskId, editInputTaskText);
+      editTextChange();
       return;
     }
 

@@ -3,7 +3,13 @@ import CheckedTask from "./CheckedTask";
 import DeleteTask from "./DeleteTask";
 import AddTask from "./AddTask";
 
-const DisplayTask = ({ list, openModal, openAddModal, closeAddModal }) => {
+const DisplayTask = ({
+  list,
+  openDeleteModal,
+  openEditingDeleteModal,
+  openAddModal,
+  closeAddModal,
+}) => {
   return (
     <div className="displayTask">
       <AddTask
@@ -18,9 +24,13 @@ const DisplayTask = ({ list, openModal, openAddModal, closeAddModal }) => {
             list={list}
             task={task}
             openAddModal={openAddModal}
-            openModal={openModal}
+            openEditingDeleteModal={openEditingDeleteModal}
           />
-          <DeleteTask list={list} task={task} openModal={openModal} />
+          <DeleteTask
+            list={list}
+            task={task}
+            openDeleteModal={openDeleteModal}
+          />
         </div>
       ))}
     </div>
